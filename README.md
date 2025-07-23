@@ -1,0 +1,2 @@
+<h1><font color="pink">Hamro Aadhiyan</font></h1>
+<p>Hamro Aadhiyan is an E-Learning platform for students who wants to get access to notes, videos reference, syllabus,updated notices and many more facilities required for bachelor studying students including courses from nepal. </p>
