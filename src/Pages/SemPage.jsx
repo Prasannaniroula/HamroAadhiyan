@@ -5,9 +5,11 @@ function SemPage({ name, fullName, course }) {
   return (
     <>
       <div className="w-screen">
+        <div className="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
         <div className="text-3xl font-bold text-center pt-20">{name}</div>
         <div className="text-center text-pink-600 border-b border-zinc-200 pb-15 p-4">
           {fullName}
+        </div>
         </div>
 
         <div className="flex justify-center text-center items-center border-b border-zinc-200 w-screen p-4 text-xl">
