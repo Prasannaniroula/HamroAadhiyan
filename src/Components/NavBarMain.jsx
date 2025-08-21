@@ -29,8 +29,8 @@ function NavBarMain() {
         </div>
 
         {/* Desktop Menu */}
-        <div className='hidden md:flex items-center gap-6'>
-          <div className='flex gap-6 mt-3 items-center'>
+        <div className='hidden md:flex md:justify-around items-center gap-8'>
+          <div className='flex gap-8 mt-3 items-center text-md'>
             {/* Dropdown: Desktop Hover */}
             <div className="group relative">
               {/* Trigger */}
@@ -51,18 +51,19 @@ function NavBarMain() {
                 <Link to="/bba" className="px-4 py-2 hover:bg-pink-100">BBA</Link>
               </div>
             </div>
-
+             
             <Link to="#" className='hover:text-pink-400'>Notices</Link>
             <Link to="/contact" className='hover:text-pink-400'>Contact Us</Link>
             <Link to="#" className='hover:text-pink-400'>Ask a Question</Link>
             <Link to="#" className='hover:text-pink-400'>About us</Link>
           </div>
-          <div>
+        </div>
+        <div className='flex gap-6 justify-center items-center text-lg'>
+          <Link to="#" className='hover:text-pink-400'>Log In</Link>
             <button className='bg-pink-600 text-white px-5 py-3 rounded-2xl'>
-              <FontAwesomeIcon icon={faUserRegular} /> Sign up/Login
+              <FontAwesomeIcon icon={faUserRegular} /> Sign up
             </button>
           </div>
-        </div>
       </nav>
 
       {/* Mobile Sidebar */}
