@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUser as faUserRegular
@@ -34,10 +34,11 @@ function NavBarMain() {
             {/* Dropdown: Desktop Hover */}
             <div className="group relative">
               {/* Trigger */}
-              <Link to="#" className="flex items-center hover:text-pink-400">
+              <NavLink to="/courses" className={({isActive})=>`flex items-center hover:text-pink-400 
+              ${isActive ? "border-b-3 border-pink-600": ""}`}>
                 Courses
                 <FontAwesomeIcon icon={faAngleDown} className="ml-1" />
-              </Link>
+              </NavLink>
 
               {/* Dropdown */}
               <div
@@ -52,13 +53,17 @@ function NavBarMain() {
               </div>
             </div>
              
-            <Link to="#" className='hover:text-pink-400'>Notices</Link>
-            <Link to="/contact" className='hover:text-pink-400'>Contact Us</Link>
-            <Link to="#" className='hover:text-pink-400'>Ask a Question</Link>
-            <Link to="#" className='hover:text-pink-400'>About us</Link>
+            <NavLink to="/notices" className={({isActive})=>`flex items-center hover:text-pink-400 
+              ${isActive ? "border-b-3 border-pink-600": ""}`}>Notices</NavLink>
+             <NavLink to="/contact" className={({isActive})=>`flex items-center hover:text-pink-400 
+              ${isActive ? "border-b-3 border-pink-600": ""}`}>Contact Us</NavLink>
+             <NavLink to="/ask" className={({isActive})=>`flex items-center hover:text-pink-400 
+              ${isActive ? "border-b-3 border-pink-600": ""}`}>Ask a Question</NavLink>
+             <NavLink to="/about" className={({isActive})=>`flex items-center hover:text-pink-400 
+              ${isActive ? "border-b-3 border-pink-600": ""}`}>About us</NavLink>
           </div>
         </div>
-        <div className='flex gap-6 justify-center items-center text-lg'>
+        <div className='hidden md:flex gap-6 justify-center items-center text-md'>
           <Link to="#" className='hover:text-pink-400'>Log In</Link>
             <button className='bg-pink-600 text-white px-5 py-3 rounded-2xl'>
               <FontAwesomeIcon icon={faUserRegular} /> Sign up
