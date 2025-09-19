@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom"; 
-import  Icon from "./appIcon.js"
+import  Icon from "./appIcon.jsx"
 import {
   faFacebook,
   faInstagram,
