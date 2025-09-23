@@ -3,6 +3,9 @@
 // -> check existing user
 // -> bcrypt password and save it in the db
 //login 
+// -> check if it is empty or not 
+// -> check if it is not an existing user if not provide error
+//-> check password
 //reset-password
 //reset-otp
 // verify-otp
@@ -22,7 +25,7 @@ export const register = async (req, res)=>{
     }
     try {
         const existingUser = userModel.findOne({email});
-        if(!existingUser){
+        if(existingUser){
             console.log('the user already exists');
             return res.json({success:false, msg:"User already exists"})
         }
@@ -41,5 +44,30 @@ export const register = async (req, res)=>{
 }
 
 export const login = async(req,res)=>{
+    const {email, password} = req.body;
+    if(!email || !password){
+        console.log("Details are missing!!")
+        return res.json({success:false, msg:"details are missing!!"})
+    }
+    try {
+        const user = await userModel.findOne({email});
+        if(!user){
+            console.log("User doesnot exists");
+            return res.json({success:false, msg:"user doesnot exists"});
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if(!isPasswordValid){
+            console.log("Password didnot match")
+            return res.json({success:false, msg:"password didnot match"});
+        }
+
+        return res.status(200).json({success:true, msg:"Successfully logged in"})
+
+
+        
+    } catch (error) {
+        return res.status(400).json({success:false, msg:error.message})
+        
+    }
     
 }
