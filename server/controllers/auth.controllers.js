@@ -2,10 +2,12 @@
 // -> check if it is empty or not 
 // -> check existing user
 // -> bcrypt password and save it in the db
+// -> generate token and add it in cookie
 //login 
 // -> check if it is empty or not 
 // -> check if it is not an existing user if not provide error
-//-> check password
+// -> check password
+// -> generate token after every login 
 //reset-password
 //reset-otp
 // verify-otp
@@ -97,4 +99,21 @@ export const login = async(req,res)=>{
         
     }
     
+}
+
+export const resetPassword = async(req,res)=>{
+    const {email, password, otp} = req.body;
+    if(!email || !password || !otp){
+       return res.json({success:false, msg:"Email, otp and new password are required"});
+    }
+    try {
+        const user = await userModel.findOne({email});
+        if(!user){
+            return res.json({success:false, msg:"user not found"});
+        }
+        
+        
+    } catch (error) {
+        return res.json({success:false, msg:error.message })
+    }
 }
