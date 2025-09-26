@@ -1,22 +1,30 @@
 
-
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import {route} from "./routes/user.routes.js";
+import connectDB from "./config/mongodb.js";
 
 
 const app = express();
 const port = process.env.PORT|| 4000; 
 
+
 app.use(express.json())
 
 app.use("/", route); 
 
+const startServer = async()=>{
+    try {
+        await connectDB();
 
-const conn_port = app.listen(port,(req,res)=>{
-    console.log(`it's working on port : http://localhost:${port}/`);
-})
-if(!conn_port){
-    console.log("Error occured");
+        app.listen(port, () => {
+            console.log(`🚀 Server running at: http://localhost:${port}/`);
+          });
+        
+    } catch (error) {
+        console.error(error.message);
+        
+    }
 }
+startServer();
