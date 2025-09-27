@@ -15,13 +15,16 @@
 // verify-email
 
 
-import userModel from "../models/user.models";
+import userModel from "../models/user.models.js";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 
 export const register = async (req, res)=>{
     const {name, email, password}= req.body;
+
+    console.log("Register endpoint hit:", req.body);
+    res.json({ message: "Register route working!" });
 
     if(!name || !email || !password){
         console.log("Details are missing !!");
@@ -37,6 +40,7 @@ export const register = async (req, res)=>{
         const hashPassword = await bcrypt.hash(password, 10);
         const user = new userModel({name, email, password:hashPassword})
         await user.save();
+
       
         //generating jwt tokens 
         const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn: "7d"});
