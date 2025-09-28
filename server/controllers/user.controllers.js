@@ -1,0 +1,41 @@
+import "dotenv/config";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import userModel from "../models/users.models.js";
+
+// Register a new user
+export const registerUser = async (req, res) => {
+    const { name, email, password } = req.body;
+       if(!name || !email || !password){
+        return res.status(400).json({message: "Please fill all the fields"})
+       }
+       console.log("this file is running");
+
+    try {
+        // Check if user already exists
+        const existingUser = await userModel.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        // Create a new user
+        const newUser = new userModel({
+            name,
+            email,
+            password: hashedPassword,
+        });
+        await newUser.save();
+      res.cookie("token", jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" }), {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 24 * 60 * 60 * 1000 // 1 day
+        });
+
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: "Server error" });
+    }
+};
