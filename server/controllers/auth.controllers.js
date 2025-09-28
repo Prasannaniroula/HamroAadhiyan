@@ -18,6 +18,7 @@
 import userModel from "../models/user.models.js";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import bcrypt from "bcryptjs";
 
 
 export const register = async (req, res)=>{
@@ -31,7 +32,7 @@ export const register = async (req, res)=>{
         return res.json({success:false, msg:"Missing Details"})
     }
     try {
-        const existingUser = userModel.findOne({email});
+        const existingUser = await userModel.findOne({email});
         if(existingUser){
             console.log('the user already exists');
             return res.json({success:false, msg:"User already exists"})
@@ -54,14 +55,13 @@ export const register = async (req, res)=>{
 
 
 
-        return res.json({success:true, msg:"Successfully registered"})
+        return res.status(200).json({success:true, msg:"Successfully registered"})
         
     } catch (error) {
         return res.status(400)
          .json({success:false, msg:error.message})        
+
     }
-
-
 }
 
 export const login = async(req,res)=>{
@@ -103,21 +103,4 @@ export const login = async(req,res)=>{
         
     }
     
-}
-
-export const resetPassword = async(req,res)=>{
-    const {email, password, otp} = req.body;
-    if(!email || !password || !otp){
-       return res.json({success:false, msg:"Email, otp and new password are required"});
-    }
-    try {
-        const user = await userModel.findOne({email});
-        if(!user){
-            return res.json({success:false, msg:"user not found"});
-        }
-        
-        
-    } catch (error) {
-        return res.json({success:false, msg:error.message })
-    }
 }

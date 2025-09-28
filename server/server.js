@@ -2,7 +2,7 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
-import authroutes from "./routes/user.routes.js";
+import route from "./routes/user.routes.js";
 import connectDB from "./config/mongodb.js";
 
 
@@ -12,7 +12,7 @@ const port = process.env.PORT|| 4000;
 
 app.use(express.json())
 
-app.use("/api/auth", authroutes); 
+app.use("/api/auth",route); 
 
 const startServer = async()=>{
     try {
