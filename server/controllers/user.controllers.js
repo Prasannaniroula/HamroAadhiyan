@@ -2,6 +2,7 @@ import "dotenv/config";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/users.models.js";
+import transporter from "../config/nodemailer.js";
 
 // Register a new user
 export const registerUser = async (req, res) => {
@@ -26,12 +27,35 @@ export const registerUser = async (req, res) => {
             password: hashedPassword,
         });
         await newUser.save();
-      res.cookie("token", jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" }), {
+
+        // Create and assign a token
+           res.cookie("token", jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" }), {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
+
+        // Send welcome email
+
+        const mailOptions = {
+            from: process.env.SENDER_EMAIL,
+            to: email,
+            subject: "Welcome!! to Mern Authentication.",
+            text: `Welcom to Mern Authentication website. Your account has been created with email id:${email}`,
+          };
+          
+          console.log(process.env.SENDER_EMAIL);
+
+          const sendemail = await transporter.sendMail(mailOptions);
+          if (!sendemail) {
+            return res
+              .status(500)
+              .json({ success: false, msg: "couldn't send email" });
+          }
+          if(sendemail){
+            console.log("Email sent successfully");
+          }
 
         res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
@@ -70,4 +94,13 @@ export const loginUser = async (req, res) => {
         console.log(error.message);
         res.status(500).json({ message: "Server error" });
     } 
+}
+
+export const logoutUser = (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+    });
+    res.status(200).json({ message: "Logged out successfully" });
 }
