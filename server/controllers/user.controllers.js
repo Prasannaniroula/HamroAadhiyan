@@ -37,12 +37,13 @@ export const registerUser = async (req, res) => {
         });
 
         // Send welcome email
+        console.log(newUser.email)
 
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
             to: email,
-            subject: "Welcome!! to Mern Authentication.",
-            text: `Welcom to Mern Authentication website. Your account has been created with email id:${email}`,
+            subject: "Welcome!! to Hamro Aadhiyan.",
+            text: `Welcome to Hamro Aadhiyan website. Your account has been created with email id:${email}`,
           };
           
           console.log(process.env.SENDER_EMAIL);
@@ -53,10 +54,6 @@ export const registerUser = async (req, res) => {
               .status(500)
               .json({ success: false, msg: "couldn't send email" });
           }
-          if(sendemail){
-            console.log("Email sent successfully");
-          }
-
         res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
         console.log(error.message);
