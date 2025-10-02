@@ -8,4 +8,4 @@
 - E-mail verification is also available for the user authenticity.
 
 # Sample for the Welcome Email in Hamro Aadhiyan
-<img src="/Server/public/Screenshot 2025-10-02 at 5.07.19 PM.png">
+<img src="/server/public/Screenshot 2025-10-02 at 5.07.19 PM.png">
