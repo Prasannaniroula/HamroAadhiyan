@@ -93,36 +93,32 @@ export const logoutUser = (req, res) => {
     res.status(200).json({ message: "Logged out successfully" });
 }
 
-export const sendOtp = (req, res) => {
-    const { email } = req.body;
-    if(!email){
-        return res.status(400).json({message: "Please provide email"})
-       }
-    try {
-        userModel.findOne({ email }).then(async (user) => {
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
-            }
-            const otp = generateOtp();
-            const otpExpireAt = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
-            user.verifyOtp = otp;
-            user.verifyOtpExpireAt = otpExpireAt;
-            await user.save();
-            try {
-                await sendOtpEmail(email, otp);
-                res.status(200).json({ message: "OTP sent to email" });
-            } catch (error) {
-                console.log("Error sending OTP email:", error.message);
-                res.status(500).json({ message: "Error sending OTP email" });
-            }
-        });
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ message: "Server error" });
-    }
+export const sendOtp = async (req, res) => {
+const userId = req.user.id;
+console.log(userId);
+const user = await userModel.findById(userId);
+console.log(user);
+if (!user) {
+    return res.status(404).json({ message: "User not found" });  
 }
-export const verifyOtp = (req, res) => {
-    const { email, otp } = req.body;
+if(user.isAccountVerified){
+    return res.status(400).json({ message: "Account already verified" });
+}
+const otp = generateOtp();
+const otpExpireAt = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+user.verifyOtp = otp;
+user.verifyOtpExpireAt = otpExpireAt;
+await user.save();
+try {
+    await sendOtpEmail(user.email, "Account Verification OTP", otp);
+    res.status(200).json({ message: "OTP sent to email" })
+} catch (error) {
+    console.log("Error sending OTP email:", error.message);
+    res.status(500).json({ message: "Error sending OTP email" });
+}
+}
+export const verifyEmail = (req, res) => {
+    const { otp } = req.body;
     if(!email || !otp){
         return res.status(400).json({message: "Please provide email and otp"})
        }
@@ -137,6 +133,7 @@ export const verifyOtp = (req, res) => {
             if (user.verifyOtp !== otp || Date.now() > user.verifyOtpExpireAt) {
                 return res.status(400).json({ message: "Invalid or expired OTP" });
             }
+
             user.isAccountVerified = true;
             user.verifyOtp = null;
             user.verifyOtpExpireAt = null;
