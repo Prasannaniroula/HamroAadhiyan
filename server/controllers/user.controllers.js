@@ -95,7 +95,6 @@ export const logoutUser = (req, res) => {
 
 export const sendOtp = async (req, res) => {
 const userId = req.user.id;
-console.log(userId);
 const user = await userModel.findById(userId);
 console.log(user);
 if (!user) {
@@ -117,13 +116,14 @@ try {
     res.status(500).json({ message: "Error sending OTP email" });
 }
 }
-export const verifyEmail = (req, res) => {
+export const verifyEmail = async (req, res) => {
     const { otp } = req.body;
-    if(!email || !otp){
+    const userId = req.user.id;
+    if(!otp){
         return res.status(400).json({message: "Please provide email and otp"})
        }
     try {
-        userModel.findOne({ email }).then(async (user) => {
+        const user = await userModel.findById(userId);
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
@@ -139,7 +139,6 @@ export const verifyEmail = (req, res) => {
             user.verifyOtpExpireAt = null;
             await user.save();
             res.status(200).json({ message: "Account verified successfully" });
-        });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ message: "Server error" });

@@ -12,4 +12,4 @@
 
 # Send Otp routes
 - This routes send the otp to verify the email which is already login for the authenticity purpose.
-<img src="/Server/public/Screenshot 2025-10-03 at 10.01.22 PM.png">
+<img src="/server/public/Screenshot 2025-10-03 at 10.01.22 PM.png">
