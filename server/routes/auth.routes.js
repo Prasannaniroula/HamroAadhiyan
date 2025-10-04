@@ -12,7 +12,7 @@ router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.post("/send-otp",userAuth, sendOtp);
 router.post("/verify-otp",userAuth,verifyEmail);
-router.post("/forgot-password",forgotPassword);
-router.post("/reset-password",resetPassword);
+router.post("/forgot-password",userAuth,forgotPassword);
+router.post("/reset-password",userAuth,resetPassword);
 
 export default router;

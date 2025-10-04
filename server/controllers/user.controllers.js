@@ -144,13 +144,13 @@ export const verifyEmail = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 }
-export const forgotPassword = (req, res) => {
+export const forgotPassword = async (req, res) => {
     const { email } = req.body;
     if(!email){
         return res.status(400).json({message: "Please provide email"})
        }
     try {
-        userModel.findOne({ email }).then(async (user) => {
+        const user = await userModel.findOne({ email });
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
@@ -166,19 +166,18 @@ export const forgotPassword = (req, res) => {
                 console.log("Error sending password reset OTP email:", error.message);
                 res.status(500).json({ message: "Error sending OTP email" });
             }
-        });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ message: "Server error" });
     }
 }
-export const resetPassword = (req, res) => {
+export const resetPassword = async (req, res) => {
     const { email, otp, newPassword } = req.body;
     if(!email || !otp || !newPassword){
         return res.status(400).json({message: "Please provide email, otp and new password"})
        }
     try {
-        userModel.findOne({ email }).then(async (user) => {
+        const user = await userModel.findOne({ email });
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
@@ -191,7 +190,7 @@ export const resetPassword = (req, res) => {
             user.resetOtpExpireAt = 0;
             await user.save();
             res.status(200).json({ message: "Password reset successfully" });
-        });
+
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ message: "Server error" });
