@@ -8,8 +8,16 @@
 - E-mail verification is also available for the user authenticity.
 
 # Sample for the Welcome Email in Hamro Aadhiyan
-<img src="/server/public/Screenshot 2025-10-02 at 5.07.19 PM.png">
+<img src="/public/Screenshot 2025-10-02 at 5.07.19 PM.png">
 
 # Send Otp routes
 - This routes send the otp to verify the email which is already login for the authenticity purpose.
-<img src="/server/public/Screenshot 2025-10-03 at 10.01.22 PM.png">
+<img src="/public/Screenshot 2025-10-03 at 10.01.22 PM.png">
+
+# Login page created using template
+
+<img src="/public/Screenshot 2025-10-05 at 6.26.27 PM.png">
+
+# Signup page created using template
+
+<img src="/public/Screenshot 2025-10-05 at 6.26.55 PM.png">
