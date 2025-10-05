@@ -17,7 +17,7 @@ function Footer() {
         { icon: 'Clock', text: 'Sun-Fri: 9:00 AM - 6:00 PM' }
       ];
       const quickLinks = [
-        { name: 'Courses', path: '#' },
+        { name: 'Courses', path: '/course' },
         { name: 'Notices', path: '#' },
         { name: 'Contact Us', path: '#' },
         { name: 'Student Dashboard', path: '#' }
@@ -25,8 +25,8 @@ function Footer() {
       const resources = [
         { name: 'Study Materials', path: '/course-detail-page' },
         { name: 'Academic Calendar', path: '/notices-board' },
-        { name: 'Student Support', path: '/contact-us' },
-        { name: 'Career Guidance', path: '/contact-us' }
+        { name: 'Student Support', path: '/contact' },
+        { name: 'Career Guidance', path: '/contact' }
       ];
   return (
     <footer className="bg-zinc-200">

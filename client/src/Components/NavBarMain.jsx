@@ -64,10 +64,10 @@ function NavBarMain() {
           </div>
         </div>
         <div className='hidden md:flex gap-6 justify-center items-center text-md'>
-          <Link to="#" className='hover:text-pink-400'>Log In</Link>
-            <button className='bg-pink-600 text-white px-5 py-3 rounded-2xl'>
+          <Link to="/login" className='hover:text-pink-400'>Log In</Link>
+          <Link to="/signup" ><button className='bg-pink-600 text-white px-5 py-3 rounded-2xl'>
               <FontAwesomeIcon icon={faUserRegular} /> Sign up
-            </button>
+            </button></Link> 
           </div>
       </nav>
 
@@ -101,7 +101,7 @@ function NavBarMain() {
             <Link to="#" className="hover:text-pink-500">Notices</Link>
             <Link to="#" className="hover:text-pink-500">Contact</Link>
             <Link to="#" className="hover:text-pink-500">About</Link>
-            <Link to="#" className="bg-pink-500 text-white px-4 py-2 rounded-full text-center hover:bg-pink-600">Login</Link>
+            <Link to="/login" className="bg-pink-500 text-white px-4 py-2 rounded-full text-center hover:bg-pink-600">Login</Link>
           </div>
 
           {/* Overlay (40%) */}

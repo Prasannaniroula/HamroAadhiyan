@@ -7,6 +7,8 @@ import Footer from "./Components/Footer";
 import SemPageWrapper from "./Components/SempageWrapper";
 import DynamicSubjects from "./Pages/DynamicSubjects";
 import Contact from "./Pages/ContactUs";
+import Login from "./Pages/Login";
+import Signup from "./Pages/SignUp";
 
 export default function App (){
   return(
@@ -15,6 +17,8 @@ export default function App (){
   <Routes>
     <Route path="/" element={<><NavBarMain/><Frontpage/><Footer/></>} />
     <Route path="/contact" element={<><NavBarMain/><Contact/><Footer/></>} />
+    <Route path="/login" element={<><NavBarMain/><Login/><Footer/></>} />
+    <Route path="/signup" element={<><NavBarMain/><Signup/><Footer/></>} />
     <Route path="/:course" element={<><NavBarMain/><SemPageWrapper/><Footer/></>} />
     <Route path="/:course/:semester" element={<><NavBarMain/><DynamicSubjects/><Footer/></>}/>
   </Routes>
