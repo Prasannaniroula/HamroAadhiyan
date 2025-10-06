@@ -5,6 +5,7 @@ import cors from "cors";
 import connectDB from "./config/mongodb.js";
 import router from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
+import userRouter from "./routes/user.routes.js";
 
 // Initialize Express app
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", router);
+app.use("/api/user", userRouter);
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
