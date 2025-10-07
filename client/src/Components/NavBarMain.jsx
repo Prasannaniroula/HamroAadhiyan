@@ -9,10 +9,13 @@ import {
   faBars,
   faXmark
 } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 function NavBarMain() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+
+  
 
   return (
     <>
