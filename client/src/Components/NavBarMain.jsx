@@ -22,7 +22,7 @@ function NavBarMain() {
       {/* Navbar */}
       <nav className='flex justify-between items-center p-5 shadow-2xl bg-white sticky top-0 z-50'>
         {/* Logo */}
-        <Link to="/"> <div className='text-xl flex gap-1 font-bold text-pink-600'>
+        <Link to="/"> <div className='text-xl flex gap-1 font-bold text-pink-600 drop-shadow-lg cursor-pointer'>
         Hamro <div className='text-black'>Aadhiyan</div>
         </div></Link>
 
@@ -47,12 +47,12 @@ function NavBarMain() {
               <div
                 className="absolute top-full left-0 mt-1 hidden group-hover:flex flex-col bg-white shadow-lg rounded-md z-50 min-w-[200px] transition-all duration-200"
               >
-                <Link to="/csit" className="px-4 py-2 hover:bg-pink-100">BSC.CSIT</Link>
-                <Link to="/bit" className="px-4 py-2 hover:bg-pink-100">BIT</Link>
+                <Link to="/courses/csit" className="px-4 py-2 hover:bg-pink-100">BSC.CSIT</Link>
+                <Link to="/courses/bit" className="px-4 py-2 hover:bg-pink-100">BIT</Link>
                 <Link to="#" className="px-4 py-2 hover:bg-pink-100">Electrical Engineering</Link>
                 <Link to="#" className="px-4 py-2 hover:bg-pink-100">Electronics Engineering</Link>
                 <Link to="#" className="px-4 py-2 hover:bg-pink-100">BSC.Zoology</Link>
-                <Link to="/bba" className="px-4 py-2 hover:bg-pink-100">BBA</Link>
+                <Link to="/courses/bba" className="px-4 py-2 hover:bg-pink-100">BBA</Link>
               </div>
             </div>
              
@@ -92,12 +92,12 @@ function NavBarMain() {
 
             {mobileDropdownOpen && (
               <div className="flex flex-col ml-4 border-l pl-4">
-                <Link to="/csit" className="py-1 hover:text-pink-500">BSC.CSIT</Link>
-                <Link to="/bit" className="py-1 hover:text-pink-500">BIT</Link>
+                <Link to="/courses/csit" className="py-1 hover:text-pink-500">BSC.CSIT</Link>
+                <Link to="/courses/bit" className="py-1 hover:text-pink-500">BIT</Link>
                 <Link to="#" className="py-1 hover:text-pink-500">Electrical Engineering</Link>
                 <Link to="#" className="py-1 hover:text-pink-500">Electronics Engineering</Link>
                 <Link to="#" className="py-1 hover:text-pink-500">BSC.Zoology</Link>
-                <Link to="/bba" className="py-1 hover:text-pink-500">BBA</Link>
+                <Link to="/courses/bba" className="py-1 hover:text-pink-500">BBA</Link>
               </div>
             )}
 

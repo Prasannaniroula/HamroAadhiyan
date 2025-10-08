@@ -7,37 +7,39 @@ function Index() {
     <div>
       {/* Hero Section */}
       <section className="h-screen w-screen pt-20 pl-10 pb-10 bg-[url('/front.jpg')] bg-cover bg-no-repeat">
-        <div className="text-2xl text-pink-400 mb-6">
+        <div className="text-2xl text-pink-400 mb-6 drop-shadow-lg">
           Learning is a journey, not a destination. So, enjoy while learning.
         </div>
-        <h1 className="text-5xl font-bold leading-snug">
+        <h1 className="text-5xl font-bold leading-snug drop-shadow-lg">
           The Best <br />
-          <span className="text-pink-400">E-Learning Platform</span> <br />
+          <span className="text-pink-400 ">E-Learning Platform</span> <br />
           For Bachelor Students
         </h1>
-        <p className="text-2xl mt-8">
+        <p className="text-2xl mt-8 drop-shadow-lg">
           Complete resources to help you guide through your Bachelor's Degree
         </p>
       </section>
 
       {/* Courses Section */}
       <section className="pt-16 px-10 pb-20 lg:h-screen">
-        <h2 className="text-3xl font-bold text-center">Courses</h2>
+      <h1 className="text-center text-4xl md:text-5xl font-bold text-pink-600 drop-shadow-lg">
+         Courses
+        </h1>
         <p className="text-xl text-center mb-10">
           Choose a course you are from
         </p>
 
         <div className="flex flex-wrap justify-center items-stretch gap-6 w-full lg:gap-30 ">
-          <Course imglink="Bsccsit.png" head="BSc.CSIT" link="/csit" />
+          <Course imglink="Bsccsit.png" head="BSc.CSIT" link="/courses/csit" />
           {/* Add more if needed */}
-          <Course imglink="bbatu.gif" head="BBA" link="/bba" />
-          <Course imglink="bittu.gif" head="BIT" link="/bit" />
+          <Course imglink="bbatu.gif" head="BBA" link="/courses/bba" />
+          <Course imglink="bittu.gif" head="BIT" link="/courses/bit" />
         </div>
       </section>
 
       {/* Why Learn Section */}
       <section className="bg-pink-50 py-10 w-screen">
-        <h2 className="text-5xl font-bold text-center mb-4">
+        <h2 className="text-5xl font-bold text-center mb-4 drop-shadow-lg">
           Why Learn with <span className="text-pink-400">Hamro Aadhiyan </span>{" "}
           ?
         </h2>
