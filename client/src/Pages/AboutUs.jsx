@@ -74,7 +74,7 @@ function AboutUs() {
               className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-pink-200"
             />
             <h3 className="mt-4 text-lg font-semibold">Bhagwati pd. thakur</h3>
-            <p className="text-gray-500">Co-founder</p>
+            <p className="text-gray-500">Co-founder/ Content-Creator</p>
           </div>
         </div>
       </div>

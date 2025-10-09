@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -9,18 +9,26 @@ import {
   faBars,
   faXmark
 } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
+import { AppContext } from '../context/Appcontext';
 
-function NavBarMain() {
+export default function NavBarMain() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+  const { userData, isLoggedIn, loading, setIsLoggedIn, setUserData, setAuthToken } = useContext(AppContext);
 
-  
+  const logout = () => {
+    localStorage.removeItem("token");
+    setAuthToken(null);
+    setIsLoggedIn(false);
+    setUserData(null);
+  };
+
+  // If auth state is still loading, return null or a spinner
+  if (loading) return null;
 
   return (
     <>
-      {/* Navbar */}
-      <nav className='flex justify-between items-center p-5 shadow-2xl bg-white sticky top-0 z-50'>
+    <nav className='flex justify-between items-center p-5 shadow-2xl bg-white sticky top-0 z-50'>
         {/* Logo */}
         <Link to="/"> <div className='text-xl flex gap-1 font-bold text-pink-600 drop-shadow-lg cursor-pointer'>
         Hamro <div className='text-black'>Aadhiyan</div>
@@ -66,53 +74,107 @@ function NavBarMain() {
               ${isActive ? "border-b-3 border-pink-600": ""}`}>About us</NavLink>
           </div>
         </div>
-        <div className='hidden md:flex gap-6 justify-center items-center text-md'>
-          <Link to="/login" className='hover:text-pink-400'>Log In</Link>
-          <Link to="/signup" ><button className='bg-pink-600 text-white px-5 py-3 rounded-2xl'>
-              <FontAwesomeIcon icon={faUserRegular} /> Sign up
-            </button></Link> 
-          </div>
+      
+        {isLoggedIn && userData ? (
+  <div className='hidden md:flex w-8 h-8 justify-center items-center rounded-full bg-black text-white relative group'>
+    {userData.name[0].toUpperCase()}
+    <div className='absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-10'>
+      <ul className='list-none m-0 p-2 bg-gray-100 text-sm'>
+        {!userData.isAccountVerified && <li className='py-1 px-2 hover:bg-gray-200 cursor-pointer'>Verify Email</li>}
+        <li onClick={logout} className='py-1 px-2 hover:bg-gray-200 cursor-pointer pr-10'>LogOut</li>
+      </ul>
+    </div>
+  </div>
+) : (
+  <div className='hidden md:flex gap-6 justify-center items-center text-md'>
+    <Link to="/login" className='hover:text-pink-400'>Log In</Link>
+    <Link to="/signup" >
+      <button className='bg-pink-600 text-white px-5 py-3 rounded-2xl'>
+        <FontAwesomeIcon icon={faUserRegular} /> Sign up
+      </button>
+    </Link> 
+  </div>
+)}
       </nav>
 
-      {/* Mobile Sidebar */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-40 flex">
-          {/* Sidebar (60%) */}
-          <div className="w-3/5 bg-white p-6 shadow-lg flex flex-col gap-4">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-xl font-bold">Menu</span>
-              <FontAwesomeIcon icon={faXmark} className="text-2xl cursor-pointer" onClick={() => setMenuOpen(false)} />
-            </div>
+    {/* Mobile Sidebar */}
+{menuOpen && (
+  <div className="fixed inset-0 z-40 flex">
+    {/* Sidebar (60%) */}
+    <div className="w-3/5 bg-white p-6 flex flex-col gap-4 shadow-lg">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-4">
+        <span className="text-xl font-bold">Menu</span>
+        <FontAwesomeIcon
+          icon={faXmark}
+          className="text-2xl cursor-pointer"
+          onClick={() => setMenuOpen(false)}
+        />
+      </div>
 
-            {/* Mobile Dropdown Toggle */}
-            <button onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)} className="flex items-center justify-between text-left">
-              Courses
-              <FontAwesomeIcon icon={faAngleDown} className={`ml-2 transition-transform ${mobileDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
+      {/* Mobile Dropdown: Courses */}
+      <button
+        onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+        className="flex items-center justify-between text-left font-medium"
+      >
+        Courses
+        <FontAwesomeIcon
+          icon={faAngleDown}
+          className={`ml-2 transition-transform ${mobileDropdownOpen ? 'rotate-180' : ''}`}
+        />
+      </button>
 
-            {mobileDropdownOpen && (
-              <div className="flex flex-col ml-4 border-l pl-4">
-                <Link to="/courses/csit" className="py-1 hover:text-pink-500">BSC.CSIT</Link>
-                <Link to="/courses/bit" className="py-1 hover:text-pink-500">BIT</Link>
-                <Link to="#" className="py-1 hover:text-pink-500">Electrical Engineering</Link>
-                <Link to="#" className="py-1 hover:text-pink-500">Electronics Engineering</Link>
-                <Link to="#" className="py-1 hover:text-pink-500">BSC.Zoology</Link>
-                <Link to="/courses/bba" className="py-1 hover:text-pink-500">BBA</Link>
-              </div>
-            )}
-
-            <Link to="#" className="hover:text-pink-500">Notices</Link>
-            <Link to="#" className="hover:text-pink-500">Contact</Link>
-            <Link to="#" className="hover:text-pink-500">About</Link>
-            <Link to="/login" className="bg-pink-500 text-white px-4 py-2 rounded-full text-center hover:bg-pink-600">Login</Link>
-          </div>
-
-          {/* Overlay (40%) */}
-          <div className="w-2/5 bg-black/30 backdrop-blur-sm" onClick={() => setMenuOpen(false)}></div>
+      {mobileDropdownOpen && (
+        <div className="flex flex-col ml-4 border-l pl-4">
+          <Link to="/courses/csit" className="py-1 hover:text-pink-500">BSC.CSIT</Link>
+          <Link to="/courses/bit" className="py-1 hover:text-pink-500">BIT</Link>
+          <Link to="#" className="py-1 hover:text-pink-500">Electrical Engineering</Link>
+          <Link to="#" className="py-1 hover:text-pink-500">Electronics Engineering</Link>
+          <Link to="#" className="py-1 hover:text-pink-500">BSC.Zoology</Link>
+          <Link to="/courses/bba" className="py-1 hover:text-pink-500">BBA</Link>
         </div>
       )}
+
+      {/* Other Links */}
+      <Link to="/notices" className="py-1 hover:text-pink-500">Notices</Link>
+      <Link to="/contact" className="py-1 hover:text-pink-500">Contact</Link>
+      <Link to="/about" className="py-1 hover:text-pink-500">About</Link>
+
+      {/* Login / Welcome */}
+      <div className="mt-4">
+        {isLoggedIn && userData ? (
+          <div className="py-2 px-4 rounded bg-gray-100 font-semibold flex justify-between items-center">
+            <span>Welcome, {userData.name.split(' ')[0]}</span>
+            <button
+              onClick={() => {
+                setIsLoggedIn(false);
+                setUserData(null);
+                localStorage.removeItem('token');
+                setMenuOpen(false);
+              }}
+              className="text-sm text-red-500 ml-2"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <Link
+            to="/login"
+            className="block bg-pink-500 text-white px-4 py-2 rounded-full text-center hover:bg-pink-600"
+          >
+            Login
+          </Link>
+        )}
+      </div>
+    </div>
+
+    {/* Overlay (40%) */}
+    <div
+      className="w-2/5 bg-black/30 backdrop-blur-sm"
+      onClick={() => setMenuOpen(false)}
+    ></div>
+  </div>
+)}
     </>
   );
 }
-
-export default NavBarMain;

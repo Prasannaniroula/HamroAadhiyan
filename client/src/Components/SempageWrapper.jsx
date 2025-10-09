@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import SemPage from '../Pages/semPage';
 
-function SemPageWrapper() {
+function SempageWrapper() {
 
   const { course } = useParams(); // e.g., "csit", "bit", "bba"
   // Define full names for known courses
@@ -24,4 +24,4 @@ function SemPageWrapper() {
   );
 }
 
-export default SemPageWrapper;
+export default SempageWrapper;

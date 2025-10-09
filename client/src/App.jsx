@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import NavBarMain from "./Components/NavBarMain";
 import Frontpage from "./Pages/Frontpage";
 import Footer from "./Components/Footer";
-import SemPageWrapper from "./Components/SempageWrapper";
+import SempageWrapper from "./Components/SempageWrapper";
 import DynamicSubjects from "./Pages/DynamicSubjects";
 import Contact from "./Pages/ContactUs";
 import Login from "./Pages/Login";
@@ -12,31 +12,32 @@ import Signup from "./Pages/SignUp";
 import Courses from "./Pages/Courses";
 import AboutUs from "./Pages/AboutUs";
 import AskQuestion from "./Pages/AskAQuestion";
+import VerifyEmail from "./Pages/VerifyEmail";
 
 export default function App (){
   return(
   <BrowserRouter>
   <ScrolltoTop/>
   <Routes>
-    //courses routes
+    {/* courses routes */}
     <Route path="/courses" element={<><NavBarMain/><Courses/><Footer/></>} />
-    <Route path="/courses/:course" element={<><NavBarMain/><SemPageWrapper/><Footer/></>} />
+    <Route path="/courses/:course" element={<><NavBarMain/><SempageWrapper/><Footer/></>} />
     <Route path="/courses/:course/:semester" element={<><NavBarMain/><DynamicSubjects/><Footer/></>}/>
 
-    // main routes
+    {/* // main routes */}
     <Route path="/" element={<><NavBarMain/><Frontpage/><Footer/></>} />
     //contact us route
     <Route path="/contact" element={<><NavBarMain/><Contact/><Footer/></>} />
-    // auth routes
+    {/* // auth routes */}
     <Route path="/login" element={<><NavBarMain/><Login/><Footer/></>} />
     <Route path="/signup" element={<><NavBarMain/><Signup/><Footer/></>} />
 
-    //about routes
+    {/* //about routes */}
     <Route path="/about" element={<><NavBarMain/><AboutUs/><Footer/></>} />
-    // ask a question route
+    {/* // ask a question route */}
     <Route path="/ask" element={<><NavBarMain/><AskQuestion/><Footer/></>} />
-    //notices
-    <Route path="/notices" element={<><NavBarMain/><h1>Notices Page</h1><Footer/></>} />
+    {/* //notices */}
+    <Route path="/notices" element={<><NavBarMain/><VerifyEmail/><Footer/></>} />
 
   </Routes>
   </BrowserRouter>

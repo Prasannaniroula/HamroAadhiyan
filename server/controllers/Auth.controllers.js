@@ -45,7 +45,7 @@ export const registerUser = async (req, res) => {
            console.log("Error sending welcome email:", error.message);
         
      }
-        res.status(201).json({ message: "User registered successfully" });
+        res.status(201).json({success:true, message: "User registered successfully" });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ message: "Server error" });
@@ -77,7 +77,7 @@ export const loginUser = async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
 
-        res.status(200).json({ message: "Logged in successfully" });
+        res.status(200).json({success:true, message: "Logged in successfully",userId: user._id, token: token });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ message: "Server error" });
@@ -191,6 +191,20 @@ export const resetPassword = async (req, res) => {
             await user.save();
             res.status(200).json({ message: "Password reset successfully" });
 
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+export const isAuthenticated = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await userModel.findById(userId).select('-password -resetOtp -resetOtpExpireAt -verifyOtp -verifyOtpExpireAt');
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ success: true, message: "User is authenticated", user });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ message: "Server error" });

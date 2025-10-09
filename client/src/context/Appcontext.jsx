@@ -1,68 +1,95 @@
-import { createContext, useEffect } from "react";
-import { useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-export const AppContent = createContext()
+export const AppContext = createContext();
 
-export const AppContextProvider = (props)=>{
+export const AppContextProvider = ({ children }) => {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    axios.defaults.withCredentials = true;
-     
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
-    const [isLoggedin, setIsLoggedin] = useState(false)
-    const [userData, setUserData] = useState(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true); // to track auth status
 
-    const getAuthState = async ()=>{
-        try {
-            const {data} = await axios.get(backendUrl + '/api/auth/is-auth')
-            if(data.success){
-                setIsLoggedin(true);
-                getUserData();
-            }
-            else{
-                setIsLoggedin(false);
-                setUserData(null);
-            }
-            
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                // Not logged in (normal case) → don't show toast
-                setIsLoggedin(false);
-                setUserData(null);
-              } else {
-                // Unexpected error → show toast
-                toast.error(error.message || "Something went wrong");
-              }
-            
-        }
+  // Setup axios defaults
+  axios.defaults.withCredentials = true;
+
+  const setAuthToken = (token) => {
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  };
+
+  const getUserData = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/user/data`);
+      if (data.success) {
+        setUserData(data.userData);
+        return data.userData;
+      }
+       else {
+        setUserData(null);
+        toast.error(data.message || "Failed to fetch user data");
+      }
+    } catch (error) {
+      setUserData(null);
+      toast.error(error.message || "Something went wrong");
+    }
+  };
+
+  const getAuthState = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setIsLoggedIn(false);
+      setUserData(null);
+      setLoading(false);
+      return;
     }
 
+    setAuthToken(token);
 
-    const getUserData = async ()=>{
-        try {
-            const {data} = await axios.get(backendUrl + '/api/user/data')
-            data.success ? setUserData(data.userData) : toast.error(data.message)
-            
-        } catch (error) {
-            toast.error(error.message)
-        } 
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`);
+      if (data.success) {
+        setIsLoggedIn(true);
+        await getUserData(); // fetch user info
+      } else {
+        setIsLoggedIn(false);
+        setUserData(null);
+      }
+    } catch (error) {
+      setIsLoggedIn(false);
+      setUserData(null);
+      if (!error.response || error.response.status !== 401) {
+        toast.error(error.message || "Something went wrong");
+      }
+    } finally {
+      setLoading(false);
     }
+  };
 
-    useEffect(()=>{
-        getAuthState();
-    },[])
+  // Call once on app load
+  useEffect(() => {
+    getAuthState();
+  }, []);
 
-    const value = {
+  return (
+    <AppContext.Provider
+      value={{
         backendUrl,
-        isLoggedin,setIsLoggedin,
-        userData,setUserData,
+        isLoggedIn,
+        setIsLoggedIn,
+        userData,
+        setUserData,
         getUserData,
-    }
-
-    return (
-        <AppContent.Provider value={value}>
-            {props.children}
-        </AppContent.Provider>
-    )
-} 
+        loading,
+        setAuthToken,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
