@@ -1,28 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AppContext } from "../context/AppContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function VerifyEmail() {
   const [otp, setOtp] = useState("");
   const [message, setMessage] = useState("");
+    const { userData, backendUrl, setIsLoggedIn, getUserData, setAuthToken } = useContext(AppContext);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const navigate = useNavigate();
 
-    if (otp.length !== 6) {
-      setMessage("Please enter a valid 6-digit OTP.");
-      return;
-    }
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+    
+      if (otp.length !== 6) {
+        setMessage("Please enter a valid 6-digit OTP.");
+        return;
+      }
+    
+      try {
+        const token = localStorage.getItem("token"); // get user token
+        const { data } = await axios.post(
+          `${backendUrl}/api/auth/verify-otp`,
+          { otp },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+    
+        
+        if (data.success) {
+          await getUserData(); // update userData in context
+          setIsLoggedIn(true);
+          navigate("/");
+        }
+         // show success message
+        setMessage(data.message);
+      } catch (error) {
+        setMessage(error.response?.data?.message || "Verification failed");
+      }
+    };
+    
 
-    // TODO: Replace with actual API call to verify OTP
-    // axios.post('/api/verify-email', { otp }).then(...)
-
-    setMessage("Email verified successfully!");
-    setOtp(""); // Reset input
-  };
-
-  const handleResend = () => {
-    // TODO: Replace with actual API call to resend OTP
-    setMessage("A new OTP has been sent to your email.");
-  };
+    const handleResend = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const { data } = await axios.post(
+          `${backendUrl}/api/auth/send-otp`,
+          { purpose: "verify" },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setMessage(data.message);
+      } catch (error) {
+        setMessage(error.response?.data?.message || "Failed to resend OTP");
+      }
+    };
+    
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-pink-50 via-white to-pink-50 px-4">

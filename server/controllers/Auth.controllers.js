@@ -27,9 +27,12 @@ export const registerUser = async (req, res) => {
             password: hashedPassword,
         });
         await newUser.save();
+        
+
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
         // Create and assign a token
-           res.cookie("token", jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" }), {
+           res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
@@ -37,17 +40,15 @@ export const registerUser = async (req, res) => {
         });
 
      try {
-              console.log(name);
               await sendWelcomeEmail(email,name);
-              return res.status(200).json({ message: "Welcome email sent" });
 
      } catch (error) {
            console.log("Error sending welcome email:", error.message);
         
      }
-        res.status(201).json({success:true, message: "User registered successfully" });
+        res.status(201).json({success:true, message: "User registered successfully",userId: newUser._id, token: token,  });
     } catch (error) {
-        console.log(error.message);
+        console.log("❌ Registration Error : ",error.message);
         res.status(500).json({ message: "Server error" });
     }
 };
@@ -98,10 +99,10 @@ const userId = req.user.id;
 const user = await userModel.findById(userId);
 console.log(user);
 if (!user) {
-    return res.status(404).json({ message: "User not found" });  
+    return res.status(404).json({success:false, message: "User not found" });  
 }
 if(user.isAccountVerified){
-    return res.status(400).json({ message: "Account already verified" });
+    return res.status(400).json({success:false, message: "Account already verified" });
 }
 const otp = generateOtp();
 const otpExpireAt = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
@@ -110,38 +111,38 @@ user.verifyOtpExpireAt = otpExpireAt;
 await user.save();
 try {
     await sendOtpEmail(user.email, "Account Verification OTP", otp);
-    res.status(200).json({ message: "OTP sent to email" })
+    res.status(200).json({success:true, message: "OTP sent to email" })
 } catch (error) {
     console.log("Error sending OTP email:", error.message);
-    res.status(500).json({ message: "Error sending OTP email" });
+    res.status(500).json({success:false, message: "Error sending OTP email" });
 }
 }
 export const verifyEmail = async (req, res) => {
     const { otp } = req.body;
     const userId = req.user.id;
     if(!otp){
-        return res.status(400).json({message: "Please provide email and otp"})
+        return res.status(400).json({success:false,message: "Please provide email and otp"})
        }
     try {
         const user = await userModel.findById(userId);
             if (!user) {
-                return res.status(404).json({ message: "User not found" });
+                return res.status(404).json({success:false, message: "User not found" });
             }
             if (user.isAccountVerified) {
-                return res.status(400).json({ message: "Account already verified" });
+                return res.status(400).json({success:false, message: "Account already verified" });
             }
             if (user.verifyOtp !== otp || Date.now() > user.verifyOtpExpireAt) {
-                return res.status(400).json({ message: "Invalid or expired OTP" });
+                return res.status(400).json({success:false, message: "Invalid or expired OTP" });
             }
 
             user.isAccountVerified = true;
             user.verifyOtp = null;
             user.verifyOtpExpireAt = null;
             await user.save();
-            res.status(200).json({ message: "Account verified successfully" });
+            res.status(200).json({success:true, message: "Account verified successfully" });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({success:false, message: "Server error" });
     }
 }
 export const forgotPassword = async (req, res) => {
@@ -205,6 +206,22 @@ export const isAuthenticated = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         res.status(200).json({ success: true, message: "User is authenticated", user });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+export const contactUs = async (req, res) => {
+    const { name, email } = req.user;
+    const { message } = req.body;
+    if(!name || !email || !message){
+        return res.status(400).json({message: "Please fill all the fields"})
+       }
+    try {
+        // Here you can implement logic to store the contact message in the database or send an email notification
+        console.log(`Contact Us Message from ${name} (${email}): ${message}`);
+        res.status(200).json({ success: true, message: "Your message has been received. We'll get back to you shortly." });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ message: "Server error" });

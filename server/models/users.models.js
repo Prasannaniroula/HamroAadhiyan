@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
     resetOtpExpireAt:{
         type:Number, 
         default:0
-    }
+    },
 }, {
     timestamps: true
 });

@@ -13,12 +13,18 @@ import Courses from "./Pages/Courses";
 import AboutUs from "./Pages/AboutUs";
 import AskQuestion from "./Pages/AskAQuestion";
 import VerifyEmail from "./Pages/VerifyEmail";
+import SendOtp from "./Pages/SendOtp";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import Notices from "./Pages/Notices";
 
 export default function App (){
   return(
   <BrowserRouter>
   <ScrolltoTop/>
+  <ToastContainer position="top-center" autoClose={3000} />
   <Routes>
+
     {/* courses routes */}
     <Route path="/courses" element={<><NavBarMain/><Courses/><Footer/></>} />
     <Route path="/courses/:course" element={<><NavBarMain/><SempageWrapper/><Footer/></>} />
@@ -37,7 +43,14 @@ export default function App (){
     {/* // ask a question route */}
     <Route path="/ask" element={<><NavBarMain/><AskQuestion/><Footer/></>} />
     {/* //notices */}
-    <Route path="/notices" element={<><NavBarMain/><VerifyEmail/><Footer/></>} />
+    <Route path="/notices" element={<><NavBarMain/><Notices/><Footer/></>} />
+
+    {/* verify routes */}
+    <Route path="/send-otp" element={<><NavBarMain/><SendOtp/><Footer/></>} />
+    <Route path="/verify" element={<><NavBarMain/><VerifyEmail/><Footer/></>} />
+
+
+
 
   </Routes>
   </BrowserRouter>

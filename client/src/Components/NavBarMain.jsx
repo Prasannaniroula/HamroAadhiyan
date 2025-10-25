@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUser as faUserRegular
@@ -15,12 +15,14 @@ export default function NavBarMain() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const { userData, isLoggedIn, loading, setIsLoggedIn, setUserData, setAuthToken } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem("token");
     setAuthToken(null);
     setIsLoggedIn(false);
     setUserData(null);
+     navigate("/login");
   };
 
   // If auth state is still loading, return null or a spinner
@@ -80,7 +82,7 @@ export default function NavBarMain() {
     {userData.name[0].toUpperCase()}
     <div className='absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-10'>
       <ul className='list-none m-0 p-2 bg-gray-100 text-sm'>
-        {!userData.isAccountVerified && <li className='py-1 px-2 hover:bg-gray-200 cursor-pointer'>Verify Email</li>}
+        {!userData.isAccountVerified && <Link to="/send-otp"> <li className='py-1 px-2 hover:bg-gray-200 cursor-pointer'>Verify Email</li></Link>}
         <li onClick={logout} className='py-1 px-2 hover:bg-gray-200 cursor-pointer pr-10'>LogOut</li>
       </ul>
     </div>
@@ -143,8 +145,9 @@ export default function NavBarMain() {
       {/* Login / Welcome */}
       <div className="mt-4">
         {isLoggedIn && userData ? (
-          <div className="py-2 px-4 rounded bg-gray-100 font-semibold flex justify-between items-center">
-            <span>Welcome, {userData.name.split(' ')[0]}</span>
+          <div className="py-2 px-4 rounded bg-gray-100 text-sm flex justify-between items-center">
+            <span>Welcome onboard, {userData.name.split(' ')[0]}</span>
+            {!userData.isAccountVerified && <Link to="/send-otp"> <div className='w-30 text-sm text-red-500 ml-2'>Verify-email</div></Link>}
             <button
               onClick={() => {
                 setIsLoggedIn(false);
@@ -152,7 +155,7 @@ export default function NavBarMain() {
                 localStorage.removeItem('token');
                 setMenuOpen(false);
               }}
-              className="text-sm text-red-500 ml-2"
+              className="text-sm text-red-500 ml-1"
             >
               Logout
             </button>

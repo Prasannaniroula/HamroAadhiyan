@@ -4,7 +4,6 @@ export const getUserData = async (req,res)=>{
 
     try {
         const userId = req.user.id;
-        console.log("User ID from token:", userId);
         const user = await userModel.findById(userId);
         if(!user){
             return res.json({success:false, message:"User not found"});
