@@ -7,6 +7,7 @@ import router from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
 import messageRouter from "./routes/message.routes.js";
+import noticesRouter from "./routes/notices.routes.js";
 
 // Initialize Express app
 
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use("/api/auth", router);
 app.use("/api/user", userRouter);
 app.use("/api/message", messageRouter);
+app.use("/api/notices",noticesRouter)
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
