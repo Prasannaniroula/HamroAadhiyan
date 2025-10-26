@@ -30,12 +30,14 @@ export const registerUser = async (req, res) => {
         
 
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        console.log("🔥 TOKEN GENERATED WITH ID! 🔥"); // <--- ADD THIS LINE
 
         // Create and assign a token
            res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "lax",
+            domain: 'localhost',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
 
@@ -71,10 +73,12 @@ export const loginUser = async (req, res) => {
         }
         // Create and assign a token
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        console.log("🔥 TOKEN GENERATED WITH ID! 🔥"); // <--- ADD THIS LINE
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "lax",
+            domain: 'localhost',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
 
@@ -89,7 +93,7 @@ export const logoutUser = (req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "lax",
     });
     res.status(200).json({ message: "Logged out successfully" });
 }

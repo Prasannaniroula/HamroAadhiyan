@@ -1,42 +1,47 @@
+// server/index.js
 import express from "express";
 import "dotenv/config";
-import cors from "cors";    
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import passport from "passport";
 
 import connectDB from "./config/mongodb.js";
-import router from "./routes/auth.routes.js";
-import cookieParser from "cookie-parser";
+import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import noticesRouter from "./routes/notices.routes.js";
-
-// Initialize Express app
+import "./config/passport.js"; // Google & Facebook strategies
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
 // Connect to MongoDB
 connectDB();
 
-// Middleware
-
-app.use(cors(
-  {
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-  }
-));
+// ---------------- Middleware ----------------
+app.use(cors({
+  origin: process.env.CLIENT_URL, // frontend origin
+  credentials: true,              // allow cookies
+}));
 app.use(express.json());
 app.use(cookieParser());
 
-// Routes
-app.use("/api/auth", router);
+// Session middleware for passport
+
+// Initialize passport
+app.use(passport.initialize());
+
+// ---------------- Routes ----------------
+app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/message", messageRouter);
-app.use("/api/notices",noticesRouter)
+app.use("/api/notices", noticesRouter);
+
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// Start the server
+// ---------------- Start Server ----------------
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

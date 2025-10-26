@@ -2,78 +2,72 @@ import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 
+
 export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl ="http://localhost:8000";
+  console.log("Backend URL:", backendUrl);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true); // to track auth status
+  const [loading, setLoading] = useState(true);
 
-  // Setup axios defaults
+  // axios should send cookies automatically
   axios.defaults.withCredentials = true;
-
-  const setAuthToken = (token) => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-    }
-  };
 
   const getUserData = async () => {
     try {
-      const { data } = await axios.get(`${backendUrl}/api/user/data`);
+      const { data } = await axios.get(`${backendUrl}/api/user/data`,{
+        withCredentials: true,
+      });
       if (data.success) {
         setUserData(data.userData);
+        setIsLoggedIn(true);
         return data.userData;
-      }
-       else {
+      } else {
         setUserData(null);
+        setIsLoggedIn(false);
         toast.error(data.message || "Failed to fetch user data");
       }
     } catch (error) {
       setUserData(null);
-      toast.error(error.message || "Something went wrong");
+      setIsLoggedIn(false);
+
+      // Check for the specific 'Unauthorized' error
+      if (error.response?.status === 401 || error.message.includes('token')) {
+          // Log a quiet message for the expected case, or just do nothing
+          // console.log("Initial auth check failed, user is logged out.");
+      } else {
+          // Display the toast for genuine server or network errors
+          toast.error(error.response?.data?.message || error.message || "Something went wrong");
+      }
     }
   };
 
-  const getAuthState = async () => {
-    setLoading(true);
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setIsLoggedIn(false);
-      setUserData(null);
-      setLoading(false);
-      return;
-    }
-
-    setAuthToken(token);
-
+  const logoutUser = async () => {
     try {
-      const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`);
-      if (data.success) {
-        setIsLoggedIn(true);
-        await getUserData(); // fetch user info
-      } else {
-        setIsLoggedIn(false);
-        setUserData(null);
-      }
+      // 1. Call the backend endpoint to clear the HTTP-only cookie
+      await axios.post(`${backendUrl}/api/auth/logout`);
     } catch (error) {
-      setIsLoggedIn(false);
-      setUserData(null);
-      if (!error.response || error.response.status !== 401) {
-        toast.error(error.message || "Something went wrong");
-      }
+      // Optional: Log error if the API call fails, but proceed with local state clear
+      console.error("Backend logout failed:", error);
     } finally {
-      setLoading(false);
+      // 2. Clear frontend state immediately
+      setUserData(null);
+      setIsLoggedIn(false);
+      setLoading(false); // Make sure loading is false after logout
     }
   };
 
   // Call once on app load
   useEffect(() => {
-    getAuthState();
+    const initAuth = async () => {
+      setLoading(true);
+      await getUserData();
+      setLoading(false);
+    };
+    initAuth();
   }, []);
 
   return (
@@ -86,7 +80,7 @@ export const AppContextProvider = ({ children }) => {
         setUserData,
         getUserData,
         loading,
-        setAuthToken,
+        logoutUser,
       }}
     >
       {children}

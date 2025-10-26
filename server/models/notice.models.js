@@ -10,7 +10,6 @@ const noticeSchema = new mongoose.Schema({
   source: { type: String },
 }, { timestamps: true });
 
-noticeSchema.index({ link: 1 }, { unique: true });
-noticeSchema.index({ adDate: -1 });
+
 
 export const Notice = mongoose.model("Notice", noticeSchema);
