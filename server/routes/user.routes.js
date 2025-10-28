@@ -1,30 +1,27 @@
-// server/routes/user.routes.js
 import express from "express";
 import userAuth from "../middleware/user.middleware.js";
+import { updateUser } from "../controllers/user.controllers.js";
+import multer from "multer";
 
 const userRouter = express.Router();
+const upload = multer({ dest: "uploads/" }); // temporary folder
 
-// GET /api/user/data — fetch current logged-in user info
 userRouter.get("/data", userAuth, async (req, res) => {
-  try {
-    // req.user is already populated by middleware
-    const user = req.user;
-
-    res.json({
-      success: true,
-      userData: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        avatar: user.avatar || null,
-        isAccountVerified: user.isAccountVerified || false,
-        provider: user.provider || "normal",
-      },
-    });
-  } catch (err) {
-    console.log("User data route error:", err.message);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
+  const user = req.user;
+  res.json({
+    success: true,
+    userData: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar || user.photo || null,
+      isAccountVerified: user.isAccountVerified || false,
+      provider: user.provider || "normal",
+    },
+  });
 });
+
+// Use multer to handle photo upload
+userRouter.put("/update", userAuth, upload.single("photo"), updateUser);
 
 export default userRouter;

@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
         default: false,
         required: true
     },
+    photo: { type: String, default: "" },
     verifyOtp:{
         type:String, 
         default:'',

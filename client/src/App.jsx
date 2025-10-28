@@ -18,6 +18,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Notices from "./Pages/Notices";
 import SocialCallback from "./pages/SocialCallback";
+import Settings from "./pages/Settings";
+
+
 
 export default function App (){
   return(
@@ -50,8 +53,13 @@ export default function App (){
     <Route path="/send-otp" element={<><NavBarMain/><SendOtp/><Footer/></>} />
     <Route path="/verify" element={<><NavBarMain/><VerifyEmail/><Footer/></>} />
 
+  
+{/* social routes */}
     <Route path="/auth/social" element={<SocialCallback />} />
-   
+
+{/* settings routes  */}
+
+    <Route path="/settings" element={<><NavBarMain/><Settings/><Footer/></>} />   
  
   </Routes>
   </BrowserRouter>

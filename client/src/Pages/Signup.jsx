@@ -120,13 +120,17 @@ export default function Signup() {
 
       {/* Social Signup */}
       <div className="space-y-3">
+      <a href={`${backendUrl}/api/auth/google`}>
         <button
           type="button"
           className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-100 transition"
         >
+        
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
           Sign Up with Google
         </button>
+        </a>
+        <a href={`${backendUrl}/api/auth/facebook`}>
         <button
           type="button"
           className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-100 transition"
@@ -134,6 +138,7 @@ export default function Signup() {
           <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="w-5 h-5" />
           Sign Up with Facebook
         </button>
+        </a>
       </div>
 
       <p className="mt-6 text-center text-gray-600">
