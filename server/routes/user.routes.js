@@ -15,7 +15,7 @@ userRouter.get("/data", userAuth, async (req, res) => {
       name: user.name,
       email: user.email,
       avatar: user.avatar || user.photo || null,
-      isAccountVerified: user.isAccountVerified || false,
+      isAccountVerified: user.isAccountVerified || true,
       provider: user.provider || "normal",
     },
   });

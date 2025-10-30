@@ -7,8 +7,6 @@ export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
   const backendUrl ="http://localhost:8000";
-  console.log("Backend URL:", backendUrl);
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,6 +26,7 @@ export const AppContextProvider = ({ children }) => {
       } else {
         setUserData(null);
         setIsLoggedIn(false);
+        toast.dismiss();
         toast.error(data.message || "Failed to fetch user data");
       }
     } catch (error) {
@@ -39,6 +38,7 @@ export const AppContextProvider = ({ children }) => {
           // Log a quiet message for the expected case, or just do nothing
           // console.log("Initial auth check failed, user is logged out.");
       } else {
+        toast.dismiss();
           // Display the toast for genuine server or network errors
           toast.error(error.response?.data?.message || error.message || "Something went wrong");
       }

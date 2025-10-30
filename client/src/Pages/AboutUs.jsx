@@ -1,7 +1,10 @@
 import React from "react";
+import { useContext } from "react";
 import { Users, BookOpen, HeartHandshake } from "lucide-react";
+import { AppContext } from "../context/AppContext";
 
 function AboutUs() {
+  const { isLoggedIn } = useContext(AppContext);
   return (
     <div className="bg-gradient-to-b from-white via-pink-50 to-white min-h-screen">
       {/* Hero Section */}
@@ -80,7 +83,7 @@ function AboutUs() {
       </div>
 
       {/* Call to Action */}
-      <div className="text-center py-16 bg-pink-600 text-white">
+      {isLoggedIn ? null : (<div className="text-center py-16 bg-pink-600 text-white">
         <h2 className="text-3xl font-bold mb-4">Join Us Today</h2>
         <p className="mb-6 text-lg">Be part of the HamroAadhiyan community and explore a new way of learning.</p>
         <a
@@ -90,7 +93,8 @@ function AboutUs() {
           Get Started
         </a>
       </div>
-    </div>
+    )}
+    </div>  
   );
 }
 

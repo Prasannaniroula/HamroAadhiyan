@@ -56,6 +56,7 @@ export default function Settings() {
       toast.success("Profile updated successfully!");
     } catch (err) {
       console.error("Update error:", err);
+      toast.dismiss();
       toast.error(err.response?.data?.message || "Update failed");
     } finally {
       setLoading(false);

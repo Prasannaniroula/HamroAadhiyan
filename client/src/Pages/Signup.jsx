@@ -13,13 +13,14 @@ export default function Signup() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const { backendUrl, setIsLoggedIn, getUserData, setAuthToken } = useContext(AppContext);
+  const { backendUrl, setIsLoggedIn, getUserData } = useContext(AppContext);
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
   
     if (password !== confirmPassword) {
+      toast.dismiss();
       toast.error("Passwords do not match");
       return;
     }
@@ -27,21 +28,20 @@ export default function Signup() {
     try {
       const { data } = await axios.post(`${backendUrl}/api/auth/register`, {name, email, password });
       if (data.success) {
-        // Save token
-        localStorage.setItem("token", data.token);
-        setAuthToken(data.token);
-
         setIsLoggedIn(true);
         await getUserData(); // fetch user info
         toast.success("Login successful!");
         navigate("/"); // navigate only after userData is fetched
       } else {
+        toast.dismiss();
         toast.error(data.message || "Login failed");
       }
     } catch (error) {
       if (error.response && error.response.data) {
+        toast.dismiss();
         toast.error(error.response.data.message || "Login failed");
       } else {
+        toast.dismiss();
         toast.error(error.message || "Something went wrong");
       }
     }

@@ -11,6 +11,8 @@ import userRouter from "./routes/user.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import noticesRouter from "./routes/notices.routes.js";
 import "./config/passport.js"; // Google & Facebook strategies
+import courseRouter from "./routes/course.routes.js";
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -34,6 +36,9 @@ app.use(passport.initialize());
 // ---------------- Routes ----------------
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+
+app.use("/api/courses", courseRouter);
+
 app.use("/api/message", messageRouter);
 app.use("/api/notices", noticesRouter);
 app.use("/uploads", express.static("uploads"));

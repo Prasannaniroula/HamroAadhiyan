@@ -182,10 +182,12 @@ export default function NavBarMain() {
       {menuOpen && (
         <div className="fixed inset-0 z-50 flex">
           {/* Sidebar Panel */}
-          <div className="w-3/5 max-w-xs bg-white p-6 flex flex-col gap-4 shadow-xl transform transition-transform duration-300 ease-in-out">
+          <div className="w-screen max-w-xs bg-white p-6 flex flex-col gap-4 shadow-xl transform transition-transform duration-300 ease-in-out">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
-              <span className="text-xl font-bold">Menu</span>
+            <div className="text-xl flex gap-1 font-bold text-pink-600 drop-shadow-lg cursor-pointer">
+            Hamro <div className="text-black">Aadhiyan</div>
+          </div>
               <FontAwesomeIcon
                 icon={faXmark}
                 className="text-2xl cursor-pointer hover:text-pink-500"

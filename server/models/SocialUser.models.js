@@ -8,7 +8,7 @@ const SocialUserSchema = new mongoose.Schema({
   facebookId: String,
   avatar: String,
   provider: String,
-  isAccountVerified: { type: Boolean, default: false },
+  isAccountVerified: { type: Boolean, default: true },
 });
 
 export const socialUser = mongoose.model("SocialUser", SocialUserSchema);

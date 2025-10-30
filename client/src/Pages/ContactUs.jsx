@@ -15,10 +15,12 @@ const Contact = () => {
     const handleSendMessage = async (e) => {
         e.preventDefault();
         if(!userData){
+            toast.dismiss();
         toast.error("Please login to send message");
         return;
         }
         if(!details || !userData.name || !userData.email){
+            toast.dismiss();
             toast.error("Please fill all the required fields");
             return;
         }
@@ -38,10 +40,12 @@ const Contact = () => {
                 setSubject("");
                 setDetails("");
             }else{
+                toast.dismiss();
                 toast.error(data.message || "Failed to send message");
             }
     }
     catch(error){
+        toast.dismiss();
         toast.error(error.response?.data?.message || "Server error");
         console.log("Error sending message:", error.message);
 }

@@ -80,7 +80,7 @@ function Semester({ course }) {
       {semesters.map((sem) => (
         <div key={sem.number}>
           <a
-            href={`/${course}/semester${sem.number}`} // OR use <Link> if you're using React Router
+            href={`${course}/semester${sem.number}`} // OR use <Link> if you're using React Router
             className="bg-white text-black rounded-xl border border-zinc-200 shadow-md p-4 flex items-center space-x-4 hover:shadow-lg transition"
           >
             <div className="text-center">
