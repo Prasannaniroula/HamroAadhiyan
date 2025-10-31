@@ -22,8 +22,11 @@ export default function NavBarMain() {
   } = useContext(AppContext);
   const navigate = useNavigate();
 
+  console.log(userData);
+
   const handleLogout = async () => {
     await logoutUser();
+
     navigate("/");
   };
 

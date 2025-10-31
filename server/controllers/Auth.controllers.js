@@ -99,28 +99,43 @@ export const logoutUser = (req, res) => {
 }
 
 export const sendOtp = async (req, res) => {
-const userId = req.user.id;
-const user = await userModel.findById(userId);
-console.log(user);
-if (!user) {
-    return res.status(404).json({success:false, message: "User not found" });  
-}
-if(user.isAccountVerified){
-    return res.status(400).json({success:false, message: "Account already verified" });
-}
-const otp = generateOtp();
-const otpExpireAt = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
-user.verifyOtp = otp;
-user.verifyOtpExpireAt = otpExpireAt;
-await user.save();
-try {
-    await sendOtpEmail(user.email, "Account Verification OTP", otp);
-    res.status(200).json({success:true, message: "OTP sent to email" })
-} catch (error) {
-    console.log("Error sending OTP email:", error.message);
-    res.status(500).json({success:false, message: "Error sending OTP email" });
-}
-}
+    try {
+      const userId = req.user.id;
+      const user = await userModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+      }
+  
+      if (user.isAccountVerified) {
+        return res.status(400).json({ success: false, message: "Account already verified" });
+      }
+  
+      const otp = generateOtp();
+      const otpExpireAt = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+  
+      user.verifyOtp = otp;
+      user.verifyOtpExpireAt = otpExpireAt;
+      await user.save();
+  
+      // Try sending the email
+      await sendOtpEmail(user.email, "Account Verification OTP", otp);
+  
+      // ✅ Only reach here if everything succeeded
+      return res.status(200).json({
+        success: true,
+        message: "OTP sent to your email successfully.",
+      });
+  
+    } catch (error) {
+      console.error("Error sending OTP email:", error.message);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to send OTP. Please try again later.",
+      });
+    }
+  };
+  
 export const verifyEmail = async (req, res) => {
     const { otp } = req.body;
     const userId = req.user.id;

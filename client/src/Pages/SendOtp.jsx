@@ -42,22 +42,32 @@ export default function SendOtp() {
   const handleSendOtp = async (e) => {
     e.preventDefault();
     const email = userData.email;
+  
     try {
       setLoading(true);
+  
       const { data } = await axios.post(`${backendUrl}/api/auth/send-otp`, {
         email,
-        purpose: "verify", // or "reset" for password reset
+        purpose: "verify",
       });
-
-      toast.success(data.message);
-      navigate("/verify")
-      - setEmail("");
+  
+      // ✅ Only show success if backend confirms
+      if (data.success) {
+        toast.success(data.message || "OTP sent successfully!");
+        navigate("/verify");
+      } else {
+        toast.dismiss();
+        toast.error(data.message || "Failed to send OTP");
+      }
+  
     } catch (error) {
+      toast.dismiss();
       toast.error(error.response?.data?.message || "Failed to send OTP");
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-pink-50 via-white to-pink-50">
