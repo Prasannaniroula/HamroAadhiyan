@@ -12,6 +12,13 @@ import messageRouter from "./routes/message.routes.js";
 import noticesRouter from "./routes/notices.routes.js";
 import "./config/passport.js"; // Google & Facebook strategies
 import courseRouter from "./routes/course.routes.js";
+import subjectRouter from "./routes/subjects.routes.js";
+import questionRouter from "./routes/question.routes.js";
+
+
+
+
+
 
 
 const app = express();
@@ -36,6 +43,8 @@ app.use(passport.initialize());
 // ---------------- Routes ----------------
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/subjects", subjectRouter);
+app.use("/api/questions", questionRouter);
 
 app.use("/api/courses", courseRouter);
 

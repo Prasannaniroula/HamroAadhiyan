@@ -7,7 +7,7 @@ const courseSchema = new mongoose.Schema({
     alias: { type: String, required: true, unique: true }, // "csit", "bit", "bba"
     semesters: [
       {
-        semester: { type: Number, required: true },
+        semester: { type: String, required: true },
         subjects: [
           {
             name: String,

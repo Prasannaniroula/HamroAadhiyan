@@ -20,7 +20,7 @@ const courses = [
     alias: "csit",
     semesters: [
       {
-        semester: 1,
+        semester: "1st semester",
         subjects: [
           {
             name: "Introduction to Information Technology",
@@ -40,7 +40,7 @@ const courses = [
         ],
       },
       {
-        semester: 2,
+        semester: "2nd semester",
         subjects: [
           {
             name: "Programming Fundamentals",
@@ -61,7 +61,7 @@ const courses = [
     alias: "bca",
     semesters: [
       {
-        semester: 1,
+        semester: "1st semester",
         subjects: [
           { name: "Computer Fundamentals", notesUrl: "", syllabus: "TBD" },
           { name: "Mathematics I", notesUrl: "", syllabus: "TBD" },
