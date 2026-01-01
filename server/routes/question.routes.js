@@ -1,58 +1,83 @@
 import express from "express";
+import sanitizeHtml from "sanitize-html";
 import Question from "../models/Question.models.js";
-import userAuth from "../middleware/user.middleware.js"; // your middleware
+import userAuth from "../middleware/user.middleware.js";
 
 const router = express.Router();
 
-// POST a new question (protected, optional)
+// helper function
+const clean = (text) =>
+  sanitizeHtml(text, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
+
+/**
+ * POST a new question (LOGIN REQUIRED + SANITIZED)
+ */
 router.post("/", userAuth, async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Login required",
+      });
+    }
+
     const { title, details, course, semester, subject } = req.body;
 
-    // userAuth middleware populates req.user
-    const user = req.user || null;
-    const userId = user?._id || null;        // ObjectId or null
-    const userName = user?.name || "Anonymous";
-
     if (!title || !details || !course) {
-      return res.status(400).json({ success: false, message: "Missing required fields" });
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields",
+      });
     }
 
     const newQuestion = new Question({
-      title,
-      details,
+      title: clean(title),
+      details: clean(details),
       course,
       semester,
       subject,
-      createdBy: user ? user._id : null,  // ObjectId or null
-      createdByName: user ? user.name : "Anonymous", 
+      createdBy: req.user._id,
+      createdByName: req.user.name,
     });
 
     await newQuestion.save();
-    res.status(201).json({ success: true, question: newQuestion });
 
+    res.status(201).json({
+      success: true,
+      question: newQuestion,
+    });
   } catch (err) {
     console.error("Error submitting question:", err);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 });
 
-// GET all questions (optional filtering)
+/**
+ * GET all questions (PUBLIC)
+ */
 router.get("/", async (req, res) => {
   try {
-    const { course, semester, subject } = req.query;
+    const questions = await Question.find()
+      .sort({ createdAt: -1 });
 
-    const filter = {};
-    if (course) filter.course = course;
-    if (semester) filter.semester = semester;
-    if (subject) filter.subject = subject;
-
-    const questions = await Question.find(filter).sort({ createdAt: -1 });
-    res.status(200).json({ success: true, questions });
+    res.status(200).json({
+      success: true,
+      questions,
+    });
   } catch (err) {
     console.error("Error fetching questions:", err);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 });
+
 
 export default router;

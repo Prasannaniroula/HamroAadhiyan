@@ -1,146 +1,117 @@
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context/AppContext";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { Camera } from "lucide-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { FaArrowLeft, FaUserCog, FaLock, FaEnvelope, FaMobileAlt, FaTrash, FaUserEdit} from "react-icons/fa";
 
-export default function Settings() {
-  const { userData, setUserData } = useContext(AppContext);
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-  const [name, setName] = useState("");
-  const [photo, setPhoto] = useState(""); // preview URL
-  const [file, setFile] = useState(null); // actual File object
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [isUserLoading, setIsUserLoading] = useState(true);
-
-  // Load user data
-  useEffect(() => {
-    if (userData) {
-      setName(userData.name || "");
-      setPhoto(userData.photo || userData.avatar || "");
-      setEmail(userData.email || "");
-      setIsUserLoading(false);
-    }
-  }, [userData]);
-
-  // Handle file selection
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (!selectedFile) return;
-
-    setFile(selectedFile);
-    setPhoto(URL.createObjectURL(selectedFile));
-  };
-
-  // Save changes
-  const handleSave = async () => {
-    try {
-      setLoading(true);
-
-      const formData = new FormData();
-      formData.append("name", name);
-      if (file) formData.append("photo", file);
-
-      const { data } = await axios.put(
-        `${backendUrl}/api/user/update`,
-        formData,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
-      setUserData(data.user);
-      toast.success("Profile updated successfully!");
-    } catch (err) {
-      console.error("Update error:", err);
-      toast.dismiss();
-      toast.error(err.response?.data?.message || "Update failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+function Settings() {
+  const [activeTab, setActiveTab] = useState("overview");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-10">
-      <div className="w-full max-w-md sm:max-w-lg md:max-w-xl bg-white/80 backdrop-blur-xl shadow-lg rounded-2xl p-6 sm:p-8 transition-all duration-300">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-blue-600">
-          Account Settings
-        </h2>
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center pt-10 px-4 md:px-0">
+      {/* Back to Homepage */}
+      <div className="w-full max-w-6xl mb-6">
+        <a
+          href="/"
+          className="flex items-center text-red-600 font-semibold hover:text-red-500"
+        >
+          <FaArrowLeft className="mr-2" /> Back to Homepage
+        </a>
+      </div>
 
-        {isUserLoading ? (
-          <div className="animate-pulse text-center text-gray-400">
-            Loading user details...
-          </div>
-        ) : (
-          <>
-            {/* Profile Photo */}
-            <div className="flex flex-col items-center mb-6 relative">
-              <div className="relative group">
-                <img
-                  src={photo || "/default-avatar.png"}
-                  alt="Profile"
-                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-blue-100 object-cover shadow-md transition-transform duration-300 group-hover:scale-105"
-                />
-                <label className="absolute bottom-1 right-1 bg-blue-500 p-2 rounded-full cursor-pointer hover:bg-blue-600 shadow-md">
-                  <Camera className="text-white w-4 h-4 sm:w-5 sm:h-5" />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                </label>
+      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-10">
+        {/* Sidebar */}
+        
+        <div className="flex md:flex-col flex-row md:w-56 w-full gap-4 md:gap-4 mb-4 md:mb-0">
+          <button
+            onClick={() => setActiveTab("overview")}
+            className={`flex items-center gap-2 p-3 rounded transition border-b-2 md:border-b-0 md:border-l-4 ${
+              activeTab === "overview"
+                ? "border-black font-semibold"
+                : "border-transparent hover:border-black"
+            }`}
+          >
+            <FaUserCog /> Overview
+          </button>
+
+          <button
+            onClick={() => setActiveTab("security")}
+            className={`flex items-center gap-2 p-3 rounded transition border-b-2 md:border-b-0 md:border-l-4 ${
+              activeTab === "security"
+                ? "border-black font-semibold"
+                : "border-transparent hover:border-black"
+            }`}
+          >
+            <FaLock /> Security
+          </button>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col">
+          {activeTab === "overview" && (
+            <div>
+              <h2 className="text-5xl font-bold">Overview</h2>
+              <h3 className="text-xl  mb-3 flex items-center gap-2">
+               Account Details
+                </h3>
+              
+              <div className="mb-6 bg-white p-4 border border-zinc-300 rounded-2xl">
+                <div className="flex flex-col">
+                <Link to="/accountsettings"className="p-4 text-left text-[18px] font-bold border-b border-zinc-300 hover:bg-zinc-200 ">
+                    <div className="flex items-center gap-2 px-2">
+                <FaUserCog className="w-6 h-6" />  Account Settings
+                </div>
+                  </Link>
+                  <button className="p-4 text-left text-[18px] font-bold border-b border-zinc-300 hover:bg-zinc-200 ">
+                  <div className="flex items-center gap-2 px-2">
+                   <FaLock className="w-6 h-5" />  Update Password
+                   </div>
+                  </button>
+                  <button className="p-4 text-left text-[18px] font-bold  hover:bg-zinc-200">
+                  <div className="flex items-center px-2 gap-2">
+                    <FaUserEdit className="w-6 h-6" />  Edit Profile
+                    </div>
+                  </button>
+                </div>
               </div>
-              <p className="text-xs sm:text-sm text-gray-500 mt-2">
-                Tap the camera icon to change photo
-              </p>
             </div>
+          )}
 
-            {/* Name */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1 text-gray-700">
-                Full Name
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter your full name"
-                className="w-full border border-gray-300 p-2 sm:p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm sm:text-base"
-              />
+          {activeTab === "security" && (
+            <div>
+              <h2 className="text-5xl font-bold">Security</h2>
+
+              <div>
+                <h3 className="text-xl  mb-3 flex items-center gap-2">
+                   Security Options
+                </h3>
+                <div className="flex flex-col gap-2 bg-white p-4 border border-zinc-300 rounded-2xl">
+                <Link className="p-4 text-left text-[18px] font-bold border-b border-zinc-300 hover:bg-zinc-200 ">
+                  <div className="flex items-center gap-2 px-2">
+                   <FaLock className="w-6 h-5" />  Change Password
+                   </div>
+                  </Link>
+                  <Link to="/settings/updatemail" className="p-4 text-left text-[18px] font-bold border-b border-zinc-300 hover:bg-zinc-200 ">
+                  <div className="flex items-center gap-2 px-2">
+                   <FaEnvelope className="w-6 h-5" />  Update Email
+                   </div>
+                  </Link>
+                  <Link to="/settings/updatemob" className="p-4 text-left text-[18px] font-bold border-b border-zinc-300 hover:bg-zinc-200 ">
+                  <div className="flex items-center gap-2 px-2">
+                   <FaMobileAlt className="w-6 h-6" />  Update Mobile Number
+                   </div>
+                  </Link>
+                  <Link to="/settings/deleteacc" className="p-4 text-left text-[18px] font-bold text-red-500 hover:bg-red-500  hover:text-white">
+                  <div className="flex items-center gap-2 px-2">
+                   <FaTrash className="w-6 h-5" />  Delete Account
+                   </div>
+                  </Link>
+                </div>
+              </div>
             </div>
-
-            {/* Email */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium mb-1 text-gray-700">
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={email}
-                readOnly
-                className="w-full border border-gray-200 p-2 sm:p-3 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed text-sm sm:text-base"
-              />
-            </div>
-
-            {/* Save Button */}
-            <button
-              onClick={handleSave}
-              disabled={loading}
-              className={`w-full py-2.5 sm:py-3 font-semibold rounded-lg text-white transition duration-200 ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700 shadow-md"
-              }`}
-            >
-              {loading ? "Saving..." : "Save Changes"}
-            </button>
-          </>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
 }
+
+export default Settings;

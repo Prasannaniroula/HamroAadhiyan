@@ -1,9 +1,8 @@
-// AskQuestion.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function AskQuestion() {
-  const [user, setUser] = useState(null); // logged-in user info
+  const [user, setUser] = useState(undefined); // undefined = loading
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [questions, setQuestions] = useState([]);
@@ -22,47 +21,45 @@ function AskQuestion() {
       .get("/api/user/data", { withCredentials: true })
       .then((res) => {
         if (res.data.success) setUser(res.data.userData);
+        else setUser(null);
       })
       .catch(() => setUser(null));
   }, []);
 
-  // ---------------- Fetch all courses ----------------
+  // ---------------- Fetch courses ----------------
   useEffect(() => {
     axios
       .get("/api/courses")
       .then((res) => setCourses(res.data))
-      .catch((err) => console.error("Error fetching courses:", err));
+      .catch(console.error);
   }, []);
 
-  // ---------------- Update subjects when course/semester changes ----------------
+  // ---------------- Update subjects ----------------
   useEffect(() => {
     if (formData.course && formData.semester) {
-      const selectedCourse = courses.find((c) => c.alias === formData.course);
-      if (!selectedCourse) {
-        setSubjects([]);
-        return;
-      }
+      const selectedCourse = courses.find(
+        (c) => c.alias === formData.course
+      );
 
-      const semesterData = selectedCourse.semesters.find(
+      const semesterData = selectedCourse?.semesters.find(
         (s) => String(s.semester) === String(formData.semester)
       );
 
       setSubjects(semesterData?.subjects || []);
-      setFormData((prev) => ({ ...prev, subject: "" })); // reset subject
+      setFormData((prev) => ({ ...prev, subject: "" }));
     } else {
       setSubjects([]);
-      setFormData((prev) => ({ ...prev, subject: "" }));
     }
   }, [formData.course, formData.semester, courses]);
 
-  // ---------------- Fetch all questions ----------------
+  // ---------------- Fetch questions ----------------
   const fetchQuestions = () => {
     axios
       .get("/api/questions")
       .then((res) => {
         if (res.data.success) setQuestions(res.data.questions);
       })
-      .catch((err) => console.error("Error fetching questions:", err));
+      .catch(console.error);
   };
 
   useEffect(() => fetchQuestions(), []);
@@ -72,17 +69,20 @@ function AskQuestion() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ---------------- Handle form submission ----------------
+  // ---------------- Handle submit ----------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { title, details, course } = formData;
-    if (!title || !details || !course) {
-      alert("Please fill all required fields!");
+
+    if (!user) {
+      alert("Login required to ask a question.");
       return;
     }
 
     try {
-      await axios.post("/api/questions", formData, { withCredentials: true });
+      await axios.post("/api/questions", formData, {
+        withCredentials: true,
+      });
+
       setFormData({
         title: "",
         details: "",
@@ -90,14 +90,46 @@ function AskQuestion() {
         semester: "",
         subject: "",
       });
+
       setSubjects([]);
       fetchQuestions();
     } catch (err) {
-      console.error("Error submitting question:", err);
-      alert("Failed to submit question. Try again.");
+      alert("Failed to submit question.");
     }
   };
 
+  // ---------------- LOADING ----------------
+  if (user === undefined) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Checking login status...</p>
+      </div>
+    );
+  }
+
+  // ---------------- NOT LOGGED IN ----------------
+  if (user === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-pink-50">
+        <div className="bg-white p-8 rounded-2xl shadow-xl text-center">
+          <h2 className="text-2xl font-bold text-pink-600">
+            Login Required
+          </h2>
+          <p className="text-gray-600 mt-3">
+            You must be logged in to ask a question.
+          </p>
+          <a
+            href="/login"
+            className="inline-block mt-5 px-6 py-3 bg-pink-600 text-white rounded-xl font-semibold hover:bg-pink-700"
+          >
+            Go to Login
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  // ---------------- LOGGED IN UI ----------------
   return (
     <div className="bg-gradient-to-b from-pink-50 via-white to-pink-50 min-h-screen">
       {/* Header */}

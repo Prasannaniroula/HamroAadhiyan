@@ -7,7 +7,7 @@ function Notices() {
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 8; // notices per page
+  const limit = 12;
 
   const fetchNotices = async (page = 1) => {
     setLoading(true);
@@ -16,6 +16,7 @@ function Notices() {
         `http://localhost:8000/api/notices?page=${page}&limit=${limit}`,
         { withCredentials: true }
       );
+
       setNotices(res.data.notices);
       setCurrentPage(res.data.currentPage);
       setTotalPages(res.data.totalPages);
@@ -62,6 +63,7 @@ function Notices() {
         Notices
       </h1>
 
+      {/* Notice Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {notices.map((notice) => (
           <a
@@ -69,13 +71,16 @@ function Notices() {
             href={notice.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="block p-5 bg-white rounded-3xl shadow-md hover:shadow-xl transition hover:-translate-y-1"
+            className="flex flex-col justify-between h-40 p-5 bg-white rounded-3xl shadow-md hover:shadow-xl transition hover:-translate-y-1"
           >
-            <h2 className="text-lg font-semibold text-black mb-2">
+            {/* Title - clamped to 2 lines */}
+            <h2 className="text-lg font-semibold text-black mb-2 line-clamp-2">
               {notice.title}
             </h2>
+
+            {/* Date at bottom */}
             <p className="text-zinc-600 text-sm font-medium">
-              {notice.adDate.split(" ")[0]} {/* show only first date */}
+              {notice.adDate.split(" ")[0]}
             </p>
           </a>
         ))}
@@ -86,19 +91,19 @@ function Notices() {
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-4 py-2 bg-pink-400 text-white rounded-lg disabled:bg-white"
+          className="w-10 h-10 flex items-center justify-center bg-pink-400 text-white rounded-lg disabled:bg-pink-200 disabled:text-gray-400"
         >
-          Prev
+          ‹
         </button>
 
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <button
             key={page}
             onClick={() => handlePageChange(page)}
-            className={`px-4 py-2 rounded-lg ${
+            className={`w-10 h-10 flex items-center justify-center rounded-lg font-medium transition ${
               page === currentPage
                 ? "bg-pink-600 text-white"
-                : "bg-pink-200 text-pink-700"
+                : "bg-pink-200 text-pink-700 hover:bg-pink-300"
             }`}
           >
             {page}
@@ -108,9 +113,9 @@ function Notices() {
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-pink-400 text-white rounded-lg disabled:bg-white"
+          className="w-10 h-10 flex items-center justify-center bg-pink-400 text-white rounded-lg disabled:bg-pink-200 disabled:text-gray-400"
         >
-          Next
+          ›
         </button>
       </div>
     </div>

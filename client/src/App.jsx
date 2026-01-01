@@ -18,8 +18,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Notices from "./Pages/Notices";
 import SocialCallback from "./pages/SocialCallback";
-import Settings from "./pages/Settings";
-
+import Settings from "./Pages/Settings";
+import AccountSettings from "./Pages/AccountSettings";
 
 
 export default function App (){
@@ -60,6 +60,7 @@ export default function App (){
 {/* settings routes  */}
 
     <Route path="/settings" element={<><NavBarMain/><Settings/><Footer/></>} />   
+    <Route path="/accountsettings" element={<><NavBarMain/><AccountSettings/><Footer/></>} /> 
  
   </Routes>
   </BrowserRouter>
