@@ -21,3 +21,27 @@
 # Signup page created using template
 
 <img src="/public/Screenshot 2025-10-05 at 6.26.55 PM.png">
+
+# HomePage
+<img src="/public/HomePageWithUserOptions.png">
+
+# Courses Page
+<img src="/public/CoursePage.png">
+
+# Notices Page with pagination
+<img src="/public/noticesPage.png">
+
+# Settings overview page 
+<img src="/public/settings overview.png">
+
+# Settings Security page
+<img src="/public/settings security.png">
+
+# Contact us page
+<img src="/public/contact-uspage.png">
+
+# Ask questions 
+<img src="/public/askquestion.png">
+
+# About us Page
+<img src="/public/Aboutus.png">

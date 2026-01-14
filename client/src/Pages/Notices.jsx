@@ -1,5 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
+
+/**
+ * Clean duplicated dates like:
+ * "2025-10-19 2025-10-19" -> "2025-10-19"
+ */
+function normalizeAdDate(adDate) {
+  if (!adDate || typeof adDate !== "string") return null;
+
+  const parts = adDate.split(" ").filter(Boolean);
+  const uniqueParts = [...new Set(parts)];
+
+  return uniqueParts.join(" ");
+}
+
+/**
+ * Convert adDate to timestamp for sorting
+ * - ISO dates (YYYY-MM-DD) → sortable
+ * - Nepali dates → pushed to bottom safely
+ */
+function getDateTimestamp(adDate) {
+  if (!adDate) return 0;
+
+  const normalized = normalizeAdDate(adDate);
+
+  // ISO date detection (YYYY-MM-DD)
+  const isoMatch = normalized.match(/\d{4}-\d{2}-\d{2}/);
+  if (isoMatch) {
+    const time = new Date(isoMatch[0]).getTime();
+    return isNaN(time) ? 0 : time;
+  }
+
+  // Unknown format (e.g., Nepali BS date)
+  return 0;
+}
 
 function Notices() {
   const [notices, setNotices] = useState([]);
@@ -17,9 +51,9 @@ function Notices() {
         { withCredentials: true }
       );
 
-      setNotices(res.data.notices);
-      setCurrentPage(res.data.currentPage);
-      setTotalPages(res.data.totalPages);
+      setNotices(res.data.notices || []);
+      setCurrentPage(res.data.currentPage || 1);
+      setTotalPages(res.data.totalPages || 1);
     } catch (err) {
       console.error(err);
       setError("Unable to load notices.");
@@ -30,32 +64,47 @@ function Notices() {
 
   useEffect(() => {
     fetchNotices(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
-  if (loading)
+  /**
+   * SORT NOTICES BY DATE (NEWEST FIRST)
+   */
+  const sortedNotices = useMemo(() => {
+    return [...notices].sort((a, b) => {
+      return getDateTimestamp(b.adDate) - getDateTimestamp(a.adDate);
+    });
+  }, [notices]);
+
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-pink-50">
         <p className="text-pink-500 font-semibold">Loading notices...</p>
       </div>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
       <div className="flex justify-center items-center h-screen bg-pink-50">
         <p className="text-red-500 font-semibold">{error}</p>
       </div>
     );
+  }
 
-  if (!notices.length)
+  if (!sortedNotices.length) {
     return (
       <div className="flex justify-center items-center h-screen bg-pink-50">
         <p className="text-pink-500 font-semibold">No notices available.</p>
       </div>
     );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-pink-50 px-6 py-10">
@@ -65,7 +114,7 @@ function Notices() {
 
       {/* Notice Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {notices.map((notice) => (
+        {sortedNotices.map((notice) => (
           <a
             key={notice._id}
             href={notice.link}
@@ -73,14 +122,14 @@ function Notices() {
             rel="noopener noreferrer"
             className="flex flex-col justify-between h-40 p-5 bg-white rounded-3xl shadow-md hover:shadow-xl transition hover:-translate-y-1"
           >
-            {/* Title - clamped to 2 lines */}
+            {/* Title */}
             <h2 className="text-lg font-semibold text-black mb-2 line-clamp-2">
               {notice.title}
             </h2>
 
-            {/* Date at bottom */}
+            {/* DATE */}
             <p className="text-zinc-600 text-sm font-medium">
-              {notice.adDate.split(" ")[0]}
+              {normalizeAdDate(notice.adDate) || "Date not available"}
             </p>
           </a>
         ))}
