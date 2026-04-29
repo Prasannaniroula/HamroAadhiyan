@@ -8,7 +8,7 @@ import SempageWrapper from "./Components/SempageWrapper";
 import DynamicSubjects from "./Pages/DynamicSubjects";
 import Contact from "./Pages/ContactUs";
 import Login from "./Pages/Login";
-import Signup from "./Pages/Signpp";
+import Signup from "./Pages/Signup";
 import Courses from "./Pages/Courses";
 import AboutUs from "./Pages/AboutUs";
 import AskQuestion from "./Pages/AskAQuestion";
