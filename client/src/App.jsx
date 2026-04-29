@@ -17,7 +17,7 @@ import SendOtp from "./Pages/SendOtp";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Notices from "./Pages/Notices";
-import SocialCallback from "./pages/SocialCallback";
+import SocialCallback from "./Pages/SocialCallback";
 import Settings from "./Pages/Settings";
 import AccountSettings from "./Pages/AccountSettings";
 import Forgorpassword from "./Pages/Forgorpassword";
