@@ -1,10 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 
-/**
- * Clean duplicated dates like:
- * "2025-10-19 2025-10-19" -> "2025-10-19"
- */
 function normalizeAdDate(adDate) {
   if (!adDate || typeof adDate !== "string") return null;
 
@@ -14,24 +10,18 @@ function normalizeAdDate(adDate) {
   return uniqueParts.join(" ");
 }
 
-/**
- * Convert adDate to timestamp for sorting
- * - ISO dates (YYYY-MM-DD) → sortable
- * - Nepali dates → pushed to bottom safely
- */
 function getDateTimestamp(adDate) {
   if (!adDate) return 0;
 
   const normalized = normalizeAdDate(adDate);
 
-  // ISO date detection (YYYY-MM-DD)
   const isoMatch = normalized.match(/\d{4}-\d{2}-\d{2}/);
   if (isoMatch) {
     const time = new Date(isoMatch[0]).getTime();
     return isNaN(time) ? 0 : time;
   }
 
-  // Unknown format (e.g., Nepali BS date)
+
   return 0;
 }
 
@@ -47,7 +37,7 @@ function Notices() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/notices?page=${page}&limit=${limit}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/notices?page=${page}&limit=${limit}`,
         { withCredentials: true }
       );
 

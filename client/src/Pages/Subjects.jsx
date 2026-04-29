@@ -6,7 +6,7 @@ export default function SemesterSubjects({ courseId }) {
   const [selectedSemester, setSelectedSemester] = useState(null);
   const [subjects, setSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
-  const backendUrl = "http://localhost:8000/api"; // adjust if needed
+  const backendUrl = import.meta.env.VITE_BACKEND_URL+"/api"; // adjust if needed
 
   // Fetch course data on mount
   useEffect(() => {
