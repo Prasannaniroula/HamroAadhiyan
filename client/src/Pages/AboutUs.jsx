@@ -1,7 +1,7 @@
 import React from "react";
 import { useContext } from "react";
 import { Users, BookOpen, HeartHandshake } from "lucide-react";
-import { AppContext } from "../context/AppContext";
+import { AppContext } from "../context/Appcontext";
 
 function AboutUs() {
   const { isLoggedIn } = useContext(AppContext);

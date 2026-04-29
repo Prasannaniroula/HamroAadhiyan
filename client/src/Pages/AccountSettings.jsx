@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context/AppContext";
+import { AppContext } from "../context/Appcontext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Camera } from "lucide-react";

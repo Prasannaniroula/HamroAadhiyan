@@ -1,5 +1,5 @@
 import React, { use, useContext, useState } from 'react'
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../context/Appcontext';
 import { useNavigate } from 'react-router-dom';
 
 function Forgorpassword() {

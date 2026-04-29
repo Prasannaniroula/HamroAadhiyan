@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { AppContext } from "../context/AppContext";
+import { AppContext } from "../context/Appcontext";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function Signup() {
