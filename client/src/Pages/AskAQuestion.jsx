@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { AppContext } from "../context/AppContext";
+import { AppContext } from "../context/Appcontext";
 
 function AskQuestion() {
   const { backendUrl, isLoggedIn, userData } = useContext(AppContext);
