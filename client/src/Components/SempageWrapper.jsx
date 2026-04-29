@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import SemPage from "../Pages/semPage";
+import SemPage from "../Pages/SemPage";
 
 function SempageWrapper() {
   const { course } = useParams(); // e.g., "csit", "bit", "bba"
