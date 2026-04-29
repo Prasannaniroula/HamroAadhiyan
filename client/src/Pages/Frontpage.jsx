@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Icon from "../components/appIcon.jsx";
+import Icon from "../Components/AppIcon.jsx";
 
 function Index() {
   return (

@@ -2,7 +2,7 @@ import React from 'react';
 import * as LucideIcons from 'lucide-react';
 import { HelpCircle } from 'lucide-react';
 
-function appIcon({
+function AppIcon({
     name,
     size = 24,
     color = "currentColor",
@@ -24,4 +24,4 @@ function appIcon({
         {...props}
     />;
 }
-export default appIcon;
+export default AppIcon;
