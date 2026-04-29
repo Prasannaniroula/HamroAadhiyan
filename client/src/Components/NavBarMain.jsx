@@ -11,7 +11,7 @@ import {
   faArrowRightFromBracket,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { AppContext } from "../context/AppContext";
+import { AppContext } from "../context/Appcontext";
 
 export default function NavBarMain() {
   const [menuOpen, setMenuOpen] = useState(false);
