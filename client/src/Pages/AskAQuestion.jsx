@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { AppContext } from "../context/AppContext";
 
 function AskQuestion() {
+  const { backendUrl, isLoggedIn, userData } = useContext(AppContext);
   const [user, setUser] = useState(undefined); // undefined = loading
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -18,7 +20,7 @@ function AskQuestion() {
   // ---------------- Fetch logged-in user ----------------
   useEffect(() => {
     axios
-      .get("/api/user/data", { withCredentials: true })
+      .get(`${backendUrl}/api/user/data`, { withCredentials: true })
       .then((res) => {
         if (res.data.success) setUser(res.data.userData);
         else setUser(null);
@@ -29,7 +31,7 @@ function AskQuestion() {
   // ---------------- Fetch courses ----------------
   useEffect(() => {
     axios
-      .get("/api/courses")
+      .get(`${backendUrl}/api/courses`)
       .then((res) => setCourses(res.data))
       .catch(console.error);
   }, []);
@@ -55,7 +57,7 @@ function AskQuestion() {
   // ---------------- Fetch questions ----------------
   const fetchQuestions = () => {
     axios
-      .get("/api/questions")
+      .get(`${backendUrl}/api/questions`)
       .then((res) => {
         if (res.data.success) setQuestions(res.data.questions);
       })
@@ -79,7 +81,7 @@ function AskQuestion() {
     }
 
     try {
-      await axios.post("/api/questions", formData, {
+      await axios.post(`${backendUrl}/api/questions`, formData, {
         withCredentials: true,
       });
 
