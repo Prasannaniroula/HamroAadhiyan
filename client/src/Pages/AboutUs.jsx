@@ -69,16 +69,6 @@ function AboutUs() {
             <h3 className="mt-4 text-lg font-semibold">Prasanna Niroula</h3>
             <p className="text-gray-500">Founder / Developer</p>
           </div>
-
-          <div className="p-6 bg-white rounded-2xl shadow hover:shadow-xl transition">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="Team Member"
-              className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-pink-200"
-            />
-            <h3 className="mt-4 text-lg font-semibold">Santosh Nepal</h3>
-            <p className="text-gray-500">Content-Creator</p>
-          </div>
         </div>
       </div>
 

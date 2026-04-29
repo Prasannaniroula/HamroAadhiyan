@@ -30,7 +30,7 @@ export default function NavBarMain() {
   return (
     <>
       {/* Navbar */}
-      <nav className="flex justify-between items-center p-5 shadow-2xl bg-white sticky top-0 z-50">
+      <nav className="flex justify-between items-center p-5 shadow-2xl bg-white sticky top-0 z-50 ">
         {/* Logo */}
         <Link to="/">
           <div className="text-xl flex gap-1 font-bold text-pink-600 drop-shadow-lg cursor-pointer">

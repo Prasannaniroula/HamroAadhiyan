@@ -20,6 +20,7 @@ import Notices from "./Pages/Notices";
 import SocialCallback from "./pages/SocialCallback";
 import Settings from "./Pages/Settings";
 import AccountSettings from "./Pages/AccountSettings";
+import Forgorpassword from "./Pages/Forgorpassword";
 
 
 export default function App (){
@@ -61,7 +62,9 @@ export default function App (){
 
     <Route path="/settings" element={<><NavBarMain/><Settings/><Footer/></>} />   
     <Route path="/accountsettings" element={<><NavBarMain/><AccountSettings/><Footer/></>} /> 
- 
+
+{/* Forgorpassword */}
+<Route path="/forgotpassword" element={<><Forgorpassword/></>} />   
   </Routes>
   </BrowserRouter>
   )
