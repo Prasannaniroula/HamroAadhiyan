@@ -4,6 +4,7 @@ import passport from 'passport';
 import jwt from "jsonwebtoken";
 
 import userAuth from "../middleware/user.middleware.js";
+import { getCookieOptions } from "../utils/Cookieoption.js";
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ const issueSocialJwtAndCookie = (req, res) => {
   
   // 2. Generate the JWT with user ID
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
-  
+
   res.cookie("token", token, getCookieOptions(7 * 24 * 60 * 60 * 1000));
   // 4. Redirect to the frontend homepage/dashboard
   res.redirect(`${CLIENT_URL}/`); 

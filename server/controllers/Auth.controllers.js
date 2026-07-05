@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import userModel from "../models/users.models.js";
 import { generateOtp, sendOtpEmail } from "../utils/otp.js";
 import { sendWelcomeEmail } from "../utils/welcomemail.js";
+import { getCookieOptions } from "../utils/Cookieoption.js";
 
 // Register a new user
 export const registerUser = async (req, res) => {
