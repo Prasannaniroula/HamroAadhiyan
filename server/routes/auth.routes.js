@@ -29,15 +29,8 @@ const issueSocialJwtAndCookie = (req, res) => {
   
   // 2. Generate the JWT with user ID
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
-
-  // 3. Set the Cookie with 'SameSite: lax'
-  res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none", 
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-  });
   
+  res.cookie("token", token, getCookieOptions(7 * 24 * 60 * 60 * 1000));
   // 4. Redirect to the frontend homepage/dashboard
   res.redirect(`${CLIENT_URL}/`); 
 };

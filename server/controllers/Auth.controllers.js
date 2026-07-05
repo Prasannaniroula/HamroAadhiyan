@@ -33,13 +33,7 @@ export const registerUser = async (req, res) => {
         console.log("🔥 TOKEN GENERATED WITH ID! 🔥"); // <--- ADD THIS LINE
 
         // Create and assign a token
-           res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            domain: 'localhost',
-            maxAge: 24 * 60 * 60 * 1000 // 1 day
-        });
+        res.cookie("token", token, getCookieOptions(24 * 60 * 60 * 1000))
 
      try {
               await sendWelcomeEmail(email,name);
@@ -73,16 +67,10 @@ export const loginUser = async (req, res) => {
         }
         // Create and assign a token
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-        
+
         const isProduction = process.env.NODE_ENV === "production";
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: isProduction ? "none" : "lax",
-            ...(process.env.COOKIE_DOMAIN ? {domain: process.env.COOKIE_DOMAIN }:{}),
-            maxAge: 24 * 60 * 60 * 1000 // 1 day
-        });
+        res.cookie("token", token, getCookieOptions(24 * 60 * 60 * 1000))
 
         res.status(200).json({success:true, message: "Logged in successfully",userId: user._id, token: token });
     } catch (error) {
@@ -92,12 +80,8 @@ export const loginUser = async (req, res) => {
 }
 
 export const logoutUser = (req, res) => {
-    res.clearCookie("token", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-    });
-    res.status(200).json({ message: "Logged out successfully" });
+    res.clearCookie("token", getCookieOptions());
+    res.status(200).json({ success: true, message: "Logged out successfully" });
 }
 
 export const sendOtp = async (req, res) => {
