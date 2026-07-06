@@ -9,36 +9,36 @@
 
 
 # HomePage
-<img src="/public/HomePage.png">
+<img src="/client/public/HomePage.png">
 
 # Courses Page
-<img src="/public/CoursesPage.png">
+<img src="/client/public/CoursesPage.png">
 
 # Notices Page
-<img src="/public/NoticesPage.png">
+<img src="/client/public/NoticesPage.png">
 
 # ContactUs Page
-<img src="/public/ContactUs.png">
+<img src="/client/public/ContactUs.png">
 
 # Ask a Question Page
-<img src="/public/AskaQuestion.png">
+<img src="/client/public/AskaQuestion.png">
 
 # Ask a Queston after authentication.
-<img src="/public/AskaQafter.png">
+<img src="/client/public/AskaQafter.png">
 
 # About Page
-<img src="/public/Aboutpage.png">
+<img src="/client/public/Aboutpage.png">
 
 # Login page
-<img src="/public/LoginPage.png">
+<img src="/client/public/LoginPage.png">
 
 # Security page
-<img src="/public/Security.png">
+<img src="/client/public/Security.png">
 
 # Settings page
-<img src="/public/Settings.png">
+<img src="/client/public/Settings.png">
 
 # Footer
-<img src="/public/Footer.png">
+<img src="/client/public/Footer.png">
 
 
