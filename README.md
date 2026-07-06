@@ -7,41 +7,38 @@
 - Forgot password using otp in the email 
 - E-mail verification is also available for the user authenticity.
 
-# Sample for the Welcome Email in Hamro Aadhiyan
-<img src="/public/Screenshot 2025-10-02 at 5.07.19 PM.png">
-
-# Send Otp routes
-- This routes send the otp to verify the email which is already login for the authenticity purpose.
-<img src="/public/Screenshot 2025-10-03 at 10.01.22 PM.png">
-
-# Login page created using template
-
-<img src="/public/Screenshot 2025-10-05 at 6.26.27 PM.png">
-
-# Signup page created using template
-
-<img src="/public/Screenshot 2025-10-05 at 6.26.55 PM.png">
 
 # HomePage
-<img src="/public/HomePageWithUserOptions.png">
+<img src="/public/HomePage.png">
 
 # Courses Page
-<img src="/public/CoursePage.png">
+<img src="/public/CoursesPage.png">
 
-# Notices Page with pagination
-<img src="/public/noticesPage.png">
+# Notices Page
+<img src="/public/NoticesPage.png">
 
-# Settings overview page 
-<img src="/public/settings overview.png">
+# ContactUs Page
+<img src="/public/ContactUs.png">
 
-# Settings Security page
-<img src="/public/settings security.png">
+# Ask a Question Page
+<img src="/public/AskaQuestion.png">
 
-# Contact us page
-<img src="/public/contact-uspage.png">
+# Ask a Queston after authentication.
+<img src="/public/AskaQafter.png">
 
-# Ask questions 
-<img src="/public/askquestion.png">
+# About Page
+<img src="/public/Aboutpage.png">
 
-# About us Page
-<img src="/public/Aboutus.png">
+# Login page
+<img src="/public/LoginPage.png">
+
+# Security page
+<img src="/public/Security.png">
+
+# Settings page
+<img src="/public/Settings.png">
+
+# Footer
+<img src="/public/Footer.png">
+
+
